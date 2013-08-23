@@ -34,17 +34,17 @@ public class Entry extends Element {
 
 	private List<Person> author = new ArrayList<Person>();
 	private List<Category> category = new ArrayList<Category>();
-	private Content content;
+	private SimpleElement content;
 	private List<Person> contributor = new ArrayList<Person>();
 	private Text id;
-	private List<Link> link = new ArrayList<Link>();
+	private List<SimpleElement> link = new ArrayList<SimpleElement>();
 	private Date published;
 	private Text rights;
 	private Source source;
 	private Text summary;
 	private Text title;
 	private AtomDate updated;
-	
+
 	public List<Person> getAuthor() {
 		return author;
 	}
@@ -61,11 +61,11 @@ public class Entry extends Element {
 		this.category = category;
 	}
 
-	public Content getContent() {
+	public SimpleElement getContent() {
 		return content;
 	}
 
-	public void setContent(Content content) {
+	public void setContent(SimpleElement content) {
 		this.content = content;
 	}
 
@@ -85,11 +85,11 @@ public class Entry extends Element {
 		this.id = id;
 	}
 
-	public List<Link> getLink() {
+	public List<SimpleElement> getLink() {
 		return link;
 	}
 
-	public void setLink(List<Link> link) {
+	public void setLink(List<SimpleElement> link) {
 		this.link = link;
 	}
 

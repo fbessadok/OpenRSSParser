@@ -29,10 +29,10 @@ import java.util.List;
  */
 
 public class Feed extends Element {
-	
+
 	private Source header;
 	private List<Entry> entry;
-	
+
 	public Feed() {
 		header = new Source();
 		entry = new ArrayList<Entry>();

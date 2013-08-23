@@ -24,25 +24,25 @@ import java.util.List;
  */
 
 public class Source extends Element {
-	
-	private Person author;
+
+	private List<Person> author = new ArrayList<Person>();
 	private List<Category> category = new ArrayList<Category>();
 	private List<Person> contributor = new ArrayList<Person>();
 	private Generator generator;
 	private Text icon;
 	private Text id;
-	private Link link;
+	private List<SimpleElement> link = new ArrayList<SimpleElement>();
 	private Text logo;
-	private Text rights; // TODO Is a Text element enough or should we create another structure
+	private Text rights;
 	private Text subtitle;
 	private Text title;
 	private AtomDate updated;
 
-	public Person getAuthor() {
+	public List<Person> getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Person author) {
+	public void setAuthor(List<Person> author) {
 		this.author = author;
 	}
 
@@ -86,11 +86,11 @@ public class Source extends Element {
 		this.id = id;
 	}
 
-	public Link getLink() {
+	public List<SimpleElement> getLink() {
 		return link;
 	}
 
-	public void setLink(Link link) {
+	public void setLink(List<SimpleElement> link) {
 		this.link = link;
 	}
 

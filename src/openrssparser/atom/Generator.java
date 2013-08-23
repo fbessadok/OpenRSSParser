@@ -10,7 +10,7 @@ package openrssparser.atom;
  */
 
 public class Generator extends Element {
-	
+
 	private String uri;
 	private String version;
 	private String text;

@@ -21,11 +21,10 @@ import javax.xml.stream.events.XMLEvent;
 import openrssparser.atom.AtomDate;
 import openrssparser.atom.AtomElementName;
 import openrssparser.atom.Category;
-import openrssparser.atom.Content;
 import openrssparser.atom.Entry;
 import openrssparser.atom.Generator;
-import openrssparser.atom.Link;
 import openrssparser.atom.Person;
+import openrssparser.atom.SimpleElement;
 import openrssparser.atom.Source;
 import openrssparser.atom.Text;
 
@@ -44,7 +43,7 @@ public enum Parser {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		eventReader = inputFactory.createXMLEventReader(read(url));
 	}
-	
+
 	private List<Attribute> getAttributes(XMLEvent event) {
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		@SuppressWarnings("unchecked")
@@ -55,14 +54,14 @@ public enum Parser {
 		return attributes;
 	}
 
-	private Person getPerson(XMLEvent event, AtomElementName ATOMELEMENT) throws XMLStreamException {
+	private Person getPerson(XMLEvent event, String elementName) throws XMLStreamException {
 		Person person = new Person();
 		person.setAttribute(getAttributes(event));
 
 		while (true) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(ATOMELEMENT.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
 					break;
 				}
 			} else if (event.isStartElement()) {
@@ -103,7 +102,7 @@ public enum Parser {
 		}
 		return category;
 	}
-	
+
 	private Generator getGenerator(XMLEvent event) throws XMLStreamException {
 		Generator generator = new Generator();
 		generator.setAttribute(getAttributes(event));
@@ -129,14 +128,14 @@ public enum Parser {
 		return generator;
 	}
 
-	private Text getText(XMLEvent event, AtomElementName ATOMELEMENT) throws XMLStreamException {
+	private Text getText(XMLEvent event, String elementName) throws XMLStreamException {
 		Text text = new Text();
 		text.setAttribute(getAttributes(event));
 
 		while (true) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(ATOMELEMENT.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
 					break;
 				}
 			} else if (event.isCharacters()) {
@@ -146,31 +145,14 @@ public enum Parser {
 		return text;
 	}
 
-	private Link getLink(XMLEvent event) throws XMLStreamException {
-		Link link = new Link();
-		link.setAttribute(getAttributes(event));
-
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					break;
-				}
-			} else if (event.isCharacters()) {
-				link.setUndefinedContent(event.asCharacters().getData());
-			}
-		}
-		return link;
-	}
-
-	private AtomDate getAtomDate(XMLEvent event, AtomElementName ATOMELEMENT) throws XMLStreamException {
+	private AtomDate getAtomDate(XMLEvent event, String elementName) throws XMLStreamException {
 		AtomDate atomDate = new AtomDate();
 		atomDate.setAttribute(getAttributes(event));
 
 		while (true) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(ATOMELEMENT.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
 					break;
 				}
 			} else if (event.isCharacters()) {
@@ -180,14 +162,14 @@ public enum Parser {
 		return atomDate;
 	}
 
-	private Content getContent(XMLEvent event) throws XMLStreamException {
-		Content content = new Content();
+	private SimpleElement getSimpleElement(XMLEvent event, String elementName) throws XMLStreamException {
+		SimpleElement content = new SimpleElement();
 		content.setAttribute(getAttributes(event));
 
 		while (eventReader.hasNext()) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
 					break;
 				}
 			} else if (event.isCharacters()) {
@@ -197,7 +179,7 @@ public enum Parser {
 		return content;
 	}
 
-	public Source getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
+	private Source getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
 		Source source = new Source();
 		source.setAttribute(getAttributes(event));
 
@@ -205,30 +187,31 @@ public enum Parser {
 			event = eventReader.nextEvent();
 
 			if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
-					source.setAuthor(getPerson(event, AtomElementName.AUTHOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
+					source.getAuthor().add(getPerson(event, AtomElementName.AUTHOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					source.getCategory().add(getCategory(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
-					source.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
+					source.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
 					source.setGenerator(getGenerator(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ICON.getName())) {
-					source.setIcon(getText(event, AtomElementName.ICON));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ID.getName())) {
-					source.setId(getText(event, AtomElementName.ID));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					source.setLink(getLink(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LOGO.getName())) {
-					source.setLogo(getText(event, AtomElementName.LOGO));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
-					source.setRights(getText(event, AtomElementName.RIGHTS));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SUBTITLE.getName())) {
-					source.setSubtitle(getText(event, AtomElementName.SUBTITLE));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TITLE.getName())) {
-					source.setTitle(getText(event, AtomElementName.TITLE));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
-					source.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ICON.getName())) {
+					source.setIcon(getText(event, AtomElementName.ICON.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
+					source.setId(getText(event, AtomElementName.ID.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
+					source.getLink().add(getSimpleElement(event, AtomElementName.LINK.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LOGO.getName())) {
+					source.setLogo(getText(event, AtomElementName.LOGO.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
+					source.setRights(getText(event, AtomElementName.RIGHTS.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.SUBTITLE.getName())) {
+					source.setSubtitle(getText(event, AtomElementName.SUBTITLE.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.TITLE.getName())) {
+					source.setTitle(getText(event, AtomElementName.TITLE.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
+					source.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
 			} else if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
@@ -251,32 +234,33 @@ public enum Parser {
 			event = eventReader.nextEvent();
 
 			if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(AtomElementName.FEED.getName())) {
 					header.setAttribute(getAttributes(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
-					header.setAuthor(getPerson(event, AtomElementName.AUTHOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
+					header.getAuthor().add(getPerson(event, AtomElementName.AUTHOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					header.getCategory().add(getCategory(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
-					header.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
+					header.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
 					header.setGenerator(getGenerator(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ICON.getName())) {
-					header.setIcon(getText(event, AtomElementName.ICON));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ID.getName())) {
-					header.setId(getText(event, AtomElementName.ID));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					header.setLink(getLink(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LOGO.getName())) {
-					header.setLogo(getText(event, AtomElementName.LOGO));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
-					header.setRights(getText(event, AtomElementName.RIGHTS));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SUBTITLE.getName())) {
-					header.setSubtitle(getText(event, AtomElementName.SUBTITLE));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TITLE.getName())) {
-					header.setTitle(getText(event, AtomElementName.TITLE));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
-					header.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ICON.getName())) {
+					header.setIcon(getText(event, AtomElementName.ICON.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
+					header.setId(getText(event, AtomElementName.ID.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
+					header.getLink().add(getSimpleElement(event, AtomElementName.LINK.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LOGO.getName())) {
+					header.setLogo(getText(event, AtomElementName.LOGO.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
+					header.setRights(getText(event, AtomElementName.RIGHTS.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.SUBTITLE.getName())) {
+					header.setSubtitle(getText(event, AtomElementName.SUBTITLE.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.TITLE.getName())) {
+					header.setTitle(getText(event, AtomElementName.TITLE.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
+					header.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
 			} else if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
@@ -312,32 +296,33 @@ public enum Parser {
 			}
 
 			if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
 					entry.setAttribute(getAttributes(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
-					entry.getAuthor().add(getPerson(event, AtomElementName.AUTHOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
+					entry.getAuthor().add(getPerson(event, AtomElementName.AUTHOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					entry.getCategory().add(getCategory(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
-					entry.setContent(getContent(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
-					entry.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ID.getName())) {
-					entry.setId(getText(event, AtomElementName.ID));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					entry.getLink().add(getLink(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.PUBLISHED.getName())) {
-					entry.setUpdated(getAtomDate(event, AtomElementName.PUBLISHED));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
-					entry.setRights(getText(event, AtomElementName.RIGHTS));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
+					entry.setContent(getSimpleElement(event, AtomElementName.CONTENT.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
+					entry.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
+					entry.setId(getText(event, AtomElementName.ID.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
+					entry.getLink().add(getSimpleElement(event, AtomElementName.LINK.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PUBLISHED.getName())) {
+					entry.setUpdated(getAtomDate(event, AtomElementName.PUBLISHED.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
+					entry.setRights(getText(event, AtomElementName.RIGHTS.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
 					entry.setSource(getSource(event));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SUMMARY.getName())) {
-					entry.setSummary(getText(event, AtomElementName.SUMMARY));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TITLE.getName())) {
-					entry.setTitle(getText(event, AtomElementName.TITLE));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
-					entry.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.SUMMARY.getName())) {
+					entry.setSummary(getText(event, AtomElementName.SUMMARY.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.TITLE.getName())) {
+					entry.setTitle(getText(event, AtomElementName.TITLE.getName()));
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
+					entry.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
 			} else if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {

@@ -20,7 +20,7 @@ public class ParseFileComparisonWithRome {
 				long begin1 = System.currentTimeMillis();
 				Parser.PARSER.parseCursorFile(atomFeed);
 				Source header = Parser.PARSER.getHeader();
-				while(Parser.PARSER.hasEntry()) {
+				while (Parser.PARSER.hasEntry()) {
 					Entry entry = Parser.PARSER.nextEntry();
 					entry.getAuthor();
 				}
@@ -40,7 +40,7 @@ public class ParseFileComparisonWithRome {
 		try {
 			SyndFeed feed = new SyndFeedInput().build(new FileReader(atomFeed));
 			List<SyndEntry> entries = feed.getEntries();
-			for(SyndEntry entry : entries) {
+			for (SyndEntry entry : entries) {
 				entry.getAuthor();
 			}
 		} catch (Exception e) {
