@@ -99,17 +99,8 @@ public enum Parser {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					break;
 				}
-			} else if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TERM.getName())) {
-					event = eventReader.nextEvent();
-					category.setTerm(event.asCharacters().getData());
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SCHEME.getName())) {
-					event = eventReader.nextEvent();
-					category.setScheme(event.asCharacters().getData());
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LABEL.getName())) {
-					event = eventReader.nextEvent();
-					category.setLabel(event.asCharacters().getData());
-				}
+			} else if (event.isCharacters()) {
+				category.setUndefinedContent(event.asCharacters().getData());
 			}
 		}
 		return category;
@@ -445,27 +436,6 @@ public enum Parser {
 						((Entry) tree).getCategory().add(category);
 					}
 					tree = category;
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SCHEME.getName())) {
-					event = eventReader.nextEvent();
-					String scheme = event.asCharacters().getData();
-					event = eventReader.nextEvent();
-					if (tree instanceof Category) {
-						((Category) tree).setScheme(scheme);
-					}
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LABEL.getName())) {
-					event = eventReader.nextEvent();
-					String label = event.asCharacters().getData();
-					event = eventReader.nextEvent();
-					if (tree instanceof Category) {
-						((Category) tree).setLabel(label);
-					}
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TERM.getName())) {
-					event = eventReader.nextEvent();
-					String term = event.asCharacters().getData();
-					event = eventReader.nextEvent();
-					if (tree instanceof Category) {
-						((Category) tree).setTerm(term);
-					}
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
 					Generator generator = new Generator();
 					generator.parent = tree;
