@@ -28,6 +28,8 @@ import openrssparser.atom.SimpleElement;
 import openrssparser.atom.Source;
 import openrssparser.atom.Text;
 
+// TODO Review and maybe refractor the blocs in getHeader() getSource() and nextElement()
+
 public enum Parser {
 
 	PARSER;
@@ -65,16 +67,17 @@ public enum Parser {
 					break;
 				}
 			} else if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.PERSONNAME.getName())) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONNAME.getName())) {
 					event = eventReader.nextEvent();
 					person.setName(event.asCharacters().getData());
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.PERSONEMAIL.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONEMAIL.getName())) {
 					Text email = new Text();
 					email.setAttribute(getAttributes(event));
 					event = eventReader.nextEvent();
 					email.setText(event.asCharacters().getData());
 					person.setEmail(email);
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.URI.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
 					Text uri = new Text();
 					uri.setAttribute(getAttributes(event));
 					event = eventReader.nextEvent();
@@ -114,10 +117,11 @@ public enum Parser {
 					break;
 				}
 			} else if (event.isStartElement()) {
-				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.URI.getName())) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
 					event = eventReader.nextEvent();
 					generator.setUri(event.asCharacters().getData());
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.VERSION.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(AtomElementName.VERSION.getName())) {
 					event = eventReader.nextEvent();
 					generator.setVersion(event.asCharacters().getData());
 				} else if (event.asStartElement().isCharacters()) {
