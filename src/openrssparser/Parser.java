@@ -35,7 +35,6 @@ public enum Parser {
 
 	PARSER;
 	private XMLEventReader eventReader;
-	private boolean hasEntry = false;
 
 	public void parseCursorFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -250,14 +249,13 @@ public enum Parser {
 		}
 		return source;
 	}
-	
+
 	public Source getHeader() throws XMLStreamException, XMLParseException {
 		Source header = new Source();
 
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
 			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
-				hasEntry = true;
 				break;
 			}
 
@@ -300,8 +298,14 @@ public enum Parser {
 		return header;
 	}
 
-	public boolean hasEntry() {
-		return hasEntry;
+	public boolean hasEntry() throws XMLStreamException {
+		if (eventReader.hasNext()) {
+			XMLEvent event = eventReader.peek();
+			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Entry nextEntry() throws XMLStreamException, XMLParseException {
@@ -314,13 +318,15 @@ public enum Parser {
 				return null;
 			}
 
-			entry = new Entry();
+			if (entry == null) {
+				entry = new Entry();
+			}
 
 			if (event.isStartElement()) {
 				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
 					entry.setAttribute(getAttributes(event));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
-					entry.setAuthor(getPerson(event, AtomElementName.AUTHOR));
+					entry.getAuthor().add(getPerson(event, AtomElementName.AUTHOR));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					entry.getCategory().add(getCategory(event));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
@@ -330,7 +336,7 @@ public enum Parser {
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ID.getName())) {
 					entry.setId(getText(event, AtomElementName.ID));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					entry.setLink(getLink(event));
+					entry.getLink().add(getLink(event));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.PUBLISHED.getName())) {
 					entry.setUpdated(getAtomDate(event, AtomElementName.PUBLISHED));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
@@ -345,7 +351,7 @@ public enum Parser {
 					entry.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
 				}
 			} else if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
 					break;
 				}
 			}
@@ -400,7 +406,7 @@ public enum Parser {
 					} else if (tree instanceof Source) {
 						((Source) tree).setAuthor(author);
 					} else if (tree instanceof Entry) {
-						((Entry) tree).setAuthor(author);
+						((Entry) tree).getAuthor().add(author);
 					}
 					tree = author;
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.PERSONNAME.getName())) {
@@ -501,7 +507,7 @@ public enum Parser {
 					} else if (tree instanceof Source) {
 						((Source) tree).setLink(link);
 					} else if (tree instanceof Entry) {
-						((Entry) tree).setLink(link);
+						((Entry) tree).getLink().add(link);
 					}
 					tree = link;
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LOGO.getName())) {

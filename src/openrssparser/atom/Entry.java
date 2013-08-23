@@ -32,12 +32,12 @@ import java.util.List;
 
 public class Entry extends Element {
 
-	private Person author;
+	private List<Person> author = new ArrayList<Person>();
 	private List<Category> category = new ArrayList<Category>();
 	private Content content;
 	private List<Person> contributor = new ArrayList<Person>();
 	private Text id;
-	private Link link;
+	private List<Link> link = new ArrayList<Link>();
 	private Date published;
 	private Text rights;
 	private Source source;
@@ -45,11 +45,11 @@ public class Entry extends Element {
 	private Text title;
 	private AtomDate updated;
 	
-	public Person getAuthor() {
+	public List<Person> getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Person author) {
+	public void setAuthor(List<Person> author) {
 		this.author = author;
 	}
 
@@ -85,11 +85,11 @@ public class Entry extends Element {
 		this.id = id;
 	}
 
-	public Link getLink() {
+	public List<Link> getLink() {
 		return link;
 	}
 
-	public void setLink(Link link) {
+	public void setLink(List<Link> link) {
 		this.link = link;
 	}
 
