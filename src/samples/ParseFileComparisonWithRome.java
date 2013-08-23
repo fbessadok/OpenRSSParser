@@ -18,11 +18,11 @@ public class ParseFileComparisonWithRome {
 		try {
 			for (int i = 0; i < 1000; i++) {
 				long begin1 = System.currentTimeMillis();
-				Parser.PARSER.parseCursorFile(atomFeed);
+				Parser.PARSER.declareFile(atomFeed);
 				Source header = Parser.PARSER.getHeader();
 				while (Parser.PARSER.hasEntry()) {
 					Entry entry = Parser.PARSER.nextEntry();
-					entry.getAuthor();
+					entry.getAuthors();
 				}
 				long end1 = System.currentTimeMillis();
 

@@ -32,12 +32,12 @@ import java.util.List;
 
 public class Entry extends Element {
 
-	private List<Person> author = new ArrayList<Person>();
-	private List<Category> category = new ArrayList<Category>();
+	private List<Person> authors = new ArrayList<Person>();
+	private List<Category> categories = new ArrayList<Category>();
 	private SimpleElement content;
-	private List<Person> contributor = new ArrayList<Person>();
+	private List<Person> contributors = new ArrayList<Person>();
 	private Text id;
-	private List<SimpleElement> link = new ArrayList<SimpleElement>();
+	private List<SimpleElement> links = new ArrayList<SimpleElement>();
 	private Date published;
 	private Text rights;
 	private Source source;
@@ -45,20 +45,20 @@ public class Entry extends Element {
 	private Text title;
 	private AtomDate updated;
 
-	public List<Person> getAuthor() {
-		return author;
+	public List<Person> getAuthors() {
+		return authors;
 	}
 
-	public void setAuthor(List<Person> author) {
-		this.author = author;
+	public void setAuthors(List<Person> author) {
+		this.authors = author;
 	}
 
-	public List<Category> getCategory() {
-		return category;
+	public List<Category> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(List<Category> category) {
-		this.category = category;
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	public SimpleElement getContent() {
@@ -69,12 +69,12 @@ public class Entry extends Element {
 		this.content = content;
 	}
 
-	public List<Person> getContributor() {
-		return contributor;
+	public List<Person> getContributors() {
+		return contributors;
 	}
 
-	public void setContributor(List<Person> contributor) {
-		this.contributor = contributor;
+	public void setContributors(List<Person> contributors) {
+		this.contributors = contributors;
 	}
 
 	public Text getId() {
@@ -85,12 +85,12 @@ public class Entry extends Element {
 		this.id = id;
 	}
 
-	public List<SimpleElement> getLink() {
-		return link;
+	public List<SimpleElement> getLinks() {
+		return links;
 	}
 
-	public void setLink(List<SimpleElement> link) {
-		this.link = link;
+	public void setLinks(List<SimpleElement> links) {
+		this.links = links;
 	}
 
 	public Date getPublished() {

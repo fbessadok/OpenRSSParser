@@ -30,13 +30,8 @@ import java.util.List;
 
 public class Feed extends Element {
 
-	private Source header;
-	private List<Entry> entry;
-
-	public Feed() {
-		header = new Source();
-		entry = new ArrayList<Entry>();
-	}
+	private Source header = new Source();
+	private List<Entry> entries = new ArrayList<Entry>();
 
 	public Source getHeader() {
 		return header;
@@ -46,12 +41,12 @@ public class Feed extends Element {
 		this.header = header;
 	}
 
-	public List<Entry> getEntry() {
-		return entry;
+	public List<Entry> getEntries() {
+		return entries;
 	}
 
-	public void setEntry(List<Entry> entry) {
-		this.entry = entry;
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
 }

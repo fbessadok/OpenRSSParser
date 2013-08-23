@@ -7,14 +7,14 @@ import javax.xml.stream.events.Attribute;
 
 public class Element {
 
-	private List<Attribute> attribute = new ArrayList<Attribute>();
+	private List<Attribute> attributes = new ArrayList<Attribute>();
 
-	public List<Attribute> getAttribute() {
-		return attribute;
+	public List<Attribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setAttribute(List<Attribute> attribute) {
-		this.attribute = attribute;
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
 	}
 
 }

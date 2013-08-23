@@ -10,7 +10,7 @@ public class ParseFile {
 		try {
 			for (int i = 0; i < 17; i++) {
 				long begin = System.currentTimeMillis();
-				Parser.PARSER.parseCursorFile(atomFeed);
+				Parser.PARSER.declareFile(atomFeed);
 				Source header = Parser.PARSER.getHeader();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));

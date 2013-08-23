@@ -11,7 +11,7 @@ public class ParseURL {
 		try {
 			for (int i = 0; i < 17; i++) {
 				long begin = System.currentTimeMillis();
-				Parser.PARSER.parseCursorURL(atomFeed);
+				Parser.PARSER.declareURL(atomFeed);
 				Source header = Parser.PARSER.getHeader();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
