@@ -6,8 +6,6 @@ import java.util.List;
 import javax.xml.stream.events.Attribute;
 
 public class Element {
-	
-	public Element parent = null;
 
 	private List<Attribute> attribute = new ArrayList<Attribute>();
 
