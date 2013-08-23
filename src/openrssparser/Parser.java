@@ -33,7 +33,7 @@ public enum Parser {
 	PARSER;
 	private XMLEventReader eventReader;
 	private Feed feed = null;
-	private boolean hasNext = false;
+	private boolean hasEntry = false;
 
 	public void parseCursorFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -214,17 +214,21 @@ public enum Parser {
 		Source header = new Source();
 		
 		while (eventReader.hasNext()) {
+			XMLEvent peek = eventReader.peek();
+			if (peek.isStartElement() && peek.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+				hasEntry = true;
+				break;
+			}
+			
 			XMLEvent event = eventReader.nextEvent();
 			
 			if (event.isStartElement()) {
 				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
-					feed = new Feed();
 					@SuppressWarnings("unchecked")
 					Iterator<Attribute> attribute = event.asStartElement().getAttributes();
 					while (attribute.hasNext()) {
-						feed.getAttribute().add(attribute.next());
+						header.getAttribute().add(attribute.next());
 					}
-					feed.setHeader(header);
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
 					header.setAuthor(getPerson(event, AtomElementName.AUTHOR));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
@@ -249,9 +253,6 @@ public enum Parser {
 					header.setTitle(getText(event, AtomElementName.TITLE));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
 					header.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
-				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
-					hasNext = true;
-					break;
 				}
 			} else if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
@@ -260,6 +261,31 @@ public enum Parser {
 			}
 		}
 		return header;
+	}
+	
+	public boolean hasEntry() {
+		return hasEntry;
+	}
+	
+	public Entry nextEntry() {
+		XMLEvent event;
+		try {
+			event = eventReader.nextEvent();
+		} catch (XMLStreamException e) {
+			return null;
+		}
+		Entry entry = new Entry();
+
+		if (event.isStartElement()) {
+			if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+				@SuppressWarnings("unchecked")
+				Iterator<Attribute> attribute = event.asStartElement().getAttributes();
+				while (attribute.hasNext()) {
+					entry.getAttribute().add(attribute.next());
+				}
+			}
+		}
+		return entry;
 	}
 
 	public void parseFullFile(String feedUrl) throws FileNotFoundException, XMLStreamException, Exception {
