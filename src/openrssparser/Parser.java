@@ -32,16 +32,9 @@ public enum Parser {
 	
 	PARSER;
 	private XMLEventReader eventReader;
-	Feed feed = null;
-	
-	private InputStream read(URL url) {
-		try {
-			return url.openStream();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
+	private Feed feed = null;
+	private boolean hasNext = false;
+
 	public void parseCursorFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		eventReader = inputFactory.createXMLEventReader(new FileReader(feedUrl));
@@ -256,6 +249,9 @@ public enum Parser {
 					header.setTitle(getText(event, AtomElementName.TITLE));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
 					header.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+					hasNext = true;
+					break;
 				}
 			} else if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
@@ -531,4 +527,11 @@ public enum Parser {
 		}
 	}
 
+	private InputStream read(URL url) {
+		try {
+			return url.openStream();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
