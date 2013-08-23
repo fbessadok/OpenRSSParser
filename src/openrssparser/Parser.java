@@ -196,7 +196,7 @@ public enum Parser {
 		Content content = new Content();
 		content.setAttribute(getAttributes(event));
 
-		while (true) {
+		while (eventReader.hasNext()) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
 				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
@@ -209,6 +209,48 @@ public enum Parser {
 		return content;
 	}
 
+	public Source getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
+		Source source = new Source();
+		source.setAttribute(getAttributes(event));
+
+		while (eventReader.hasNext()) {
+			event = eventReader.nextEvent();
+
+			if (event.isStartElement()) {
+				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.AUTHOR.getName())) {
+					source.setAuthor(getPerson(event, AtomElementName.AUTHOR));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
+					source.getCategory().add(getCategory(event));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
+					source.getContributor().add(getPerson(event, AtomElementName.CONTRIBUTOR));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
+					source.setGenerator(getGenerator(event));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ICON.getName())) {
+					source.setIcon(getText(event, AtomElementName.ICON));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ID.getName())) {
+					source.setId(getText(event, AtomElementName.ID));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LINK.getName())) {
+					source.setLink(getLink(event));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.LOGO.getName())) {
+					source.setLogo(getText(event, AtomElementName.LOGO));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
+					source.setRights(getText(event, AtomElementName.RIGHTS));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SUBTITLE.getName())) {
+					source.setSubtitle(getText(event, AtomElementName.SUBTITLE));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TITLE.getName())) {
+					source.setTitle(getText(event, AtomElementName.TITLE));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
+					source.setUpdated(getAtomDate(event, AtomElementName.UPDATED));
+				}
+			} else if (event.isEndElement()) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
+					break;
+				}
+			}
+		}
+		return source;
+	}
+	
 	public Source getHeader() throws XMLStreamException, XMLParseException {
 		Source header = new Source();
 
@@ -262,7 +304,7 @@ public enum Parser {
 		return hasEntry;
 	}
 
-	public Entry nextEntry() throws XMLStreamException {
+	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		Entry entry = null;
 		while (eventReader.hasNext()) {
 			XMLEvent event;
@@ -293,6 +335,10 @@ public enum Parser {
 					entry.setUpdated(getAtomDate(event, AtomElementName.PUBLISHED));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
 					entry.setRights(getText(event, AtomElementName.RIGHTS));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
+					entry.setSource(getSource(event));
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SUMMARY.getName())) {
+					entry.setSummary(getText(event, AtomElementName.SUMMARY));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.TITLE.getName())) {
 					entry.setTitle(getText(event, AtomElementName.TITLE));
 				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.UPDATED.getName())) {

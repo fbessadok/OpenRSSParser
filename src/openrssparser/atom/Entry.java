@@ -41,7 +41,7 @@ public class Entry extends Element {
 	private Date published;
 	private Text rights;
 	private Source source;
-	private String summary;
+	private Text summary;
 	private Text title;
 	private AtomDate updated;
 	
@@ -117,11 +117,11 @@ public class Entry extends Element {
 		this.source = source;
 	}
 
-	public String getSummary() {
+	public Text getSummary() {
 		return summary;
 	}
 
-	public void setSummary(String summary) {
+	public void setSummary(Text summary) {
 		this.summary = summary;
 	}
 
