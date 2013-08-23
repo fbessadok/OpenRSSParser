@@ -1,6 +1,6 @@
 package openrssparser.atom;
 
-public class Content {
+public class Content extends Element {
 	
 	// TODO maybe transform this in an interface and create the 4 other Content types
 	
