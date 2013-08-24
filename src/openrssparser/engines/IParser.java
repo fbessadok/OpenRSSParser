@@ -8,10 +8,10 @@ import openrssparser.models.atom.Source;
 
 public interface IParser {
 	
-	public Source getHeader() throws XMLStreamException, XMLParseException;
+	Source getHeader() throws XMLStreamException, XMLParseException;
 	
-	public boolean hasEntry() throws XMLStreamException;
+	boolean hasEntry() throws XMLStreamException;
 	
-	public Entry nextEntry() throws XMLStreamException, XMLParseException;
+	Entry nextEntry() throws XMLStreamException, XMLParseException;
 
 }

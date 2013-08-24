@@ -202,10 +202,8 @@ public enum AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
 					source.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
-			} else if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
-					break;
-				}
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
+				break;
 			}
 		}
 		return source;
@@ -252,10 +250,8 @@ public enum AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
 					header.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
-			} else if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
-					break;
-				}
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
+				break;
 			}
 		}
 		return header;
@@ -316,10 +312,8 @@ public enum AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.UPDATED.getName())) {
 					entry.setUpdated(getAtomDate(event, AtomElementName.UPDATED.getName()));
 				}
-			} else if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
-					break;
-				}
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
+				break;
 			}
 		}
 		return entry;
