@@ -41,14 +41,10 @@ public class ParseFileComparisonWithRome {
 	}
 
 	public static void parseWithRome(String atomFeed) throws Exception {
-		try {
-			SyndFeed feed = new SyndFeedInput().build(new FileReader(atomFeed));
-			List<SyndEntry> entries = feed.getEntries();
-			for (SyndEntry entry : entries) {
-				entry.getAuthor();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		SyndFeed feed = new SyndFeedInput().build(new FileReader(atomFeed));
+		List<SyndEntry> entries = feed.getEntries();
+		for (SyndEntry entry : entries) {
+			entry.getAuthor();
 		}
 	}
 }
