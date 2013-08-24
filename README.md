@@ -18,13 +18,18 @@ Created on august 23th, 2013, it's obviously extremely small and not usable in r
 
 **Example**
 
-    Parser.PARSER.declareFile(atomFeed);
-    Source header = Parser.PARSER.getHeader();
-    while (Parser.PARSER.hasEntry()) {
-        Entry entry = Parser.PARSER.nextEntry();
-        entry.getAuthors();
-        entry.getTitle();
+    OpenRSS.PARSER.declareFile(atomFeed);
+    Source header = OpenRSS.getInstance().getHeader();
+    while (OpenRSS.getInstance().hasEntry()) {
+      Entry entry = OpenRSS.getInstance().nextEntry();
+      entry.getAuthors();
     }
+
+You can store the parser in its own variable after declaring your source:
+
+    IParser myParser = OpenRSS.getInstance();
+
+More examples in the samples package.
 
 ## Wanna help ?
 
