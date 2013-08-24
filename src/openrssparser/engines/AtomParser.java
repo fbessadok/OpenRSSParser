@@ -21,6 +21,13 @@ import openrssparser.models.atom.SimpleElement;
 import openrssparser.models.atom.Source;
 import openrssparser.models.atom.Text;
 
+/*
+ * Atom Feed Parser
+ * Following the RFC 4287 specifications
+ * http://www.ietf.org/rfc/rfc4287.txt
+ * 
+ */
+
 // TODO Review and maybe refractor the blocs in getHeader() getSource() and nextEntry()
 
 public enum AtomParser implements IParser {
