@@ -1,4 +1,4 @@
-package openrssparser.atom;
+package openrssparser.models.atom;
 
 public class Text extends Element {
 

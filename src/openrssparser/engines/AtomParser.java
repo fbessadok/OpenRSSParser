@@ -1,11 +1,5 @@
-package openrssparser;
+package openrssparser.engines;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,37 +7,28 @@ import java.util.List;
 import javax.management.modelmbean.XMLParseException;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import openrssparser.atom.AtomDate;
-import openrssparser.atom.AtomElementName;
-import openrssparser.atom.Category;
-import openrssparser.atom.Entry;
-import openrssparser.atom.Generator;
-import openrssparser.atom.Person;
-import openrssparser.atom.SimpleElement;
-import openrssparser.atom.Source;
-import openrssparser.atom.Text;
+import openrssparser.models.atom.AtomDate;
+import openrssparser.models.atom.AtomElementName;
+import openrssparser.models.atom.Category;
+import openrssparser.models.atom.Entry;
+import openrssparser.models.atom.Generator;
+import openrssparser.models.atom.Person;
+import openrssparser.models.atom.SimpleElement;
+import openrssparser.models.atom.Source;
+import openrssparser.models.atom.Text;
 
-// TODO Review and maybe refractor the blocs in getHeader() getSource() and nextElement()
+// TODO Review and maybe refractor the blocs in getHeader() getSource() and nextEntry()
 
-public enum Parser {
+public enum AtomParser implements IParser {
 
 	PARSER;
 	private XMLEventReader eventReader;
-
-	public void declareFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		eventReader = inputFactory.createXMLEventReader(new FileReader(feedUrl));
-	}
-
-	public void declareURL(String feedUrl) throws XMLStreamException, FileNotFoundException, MalformedURLException {
-		URL url = new URL(feedUrl);
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		eventReader = inputFactory.createXMLEventReader(read(url));
+	public void setEventReader(XMLEventReader eventReader) {
+		this.eventReader = eventReader;
 	}
 
 	private List<Attribute> getAttributes(XMLEvent event) {
@@ -226,6 +211,7 @@ public enum Parser {
 		return source;
 	}
 
+	@Override
 	public Source getHeader() throws XMLStreamException, XMLParseException {
 		Source header = new Source();
 
@@ -275,6 +261,7 @@ public enum Parser {
 		return header;
 	}
 
+	@Override
 	public boolean hasEntry() throws XMLStreamException {
 		if (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
@@ -285,6 +272,7 @@ public enum Parser {
 		return false;
 	}
 
+	@Override
 	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		Entry entry = null;
 		while (eventReader.hasNext()) {
@@ -337,11 +325,4 @@ public enum Parser {
 		return entry;
 	}
 
-	private InputStream read(URL url) {
-		try {
-			return url.openStream();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }

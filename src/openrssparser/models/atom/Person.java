@@ -1,4 +1,4 @@
-package openrssparser.atom;
+package openrssparser.models.atom;
 
 /*
  * atomPersonConstruct =

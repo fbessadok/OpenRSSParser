@@ -1,4 +1,4 @@
-package openrssparser.atom;
+package openrssparser.models.atom;
 
 /*
  * We're putting all the element names here and not
