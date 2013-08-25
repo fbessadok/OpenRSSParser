@@ -6,11 +6,11 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
-import openrssparser.models.rss.RSSElementName;
 import openrssparser.models.atom.Entry;
-import openrssparser.models.atom.Source;
-import openrssparser.models.atom.Text;
 import openrssparser.models.rss.Header;
+import openrssparser.models.rss.Image;
+import openrssparser.models.rss.RSSElementName;
+import openrssparser.models.rss.TextInput;
 
 /*
  * RSS 2 Feed Parser
@@ -24,13 +24,14 @@ import openrssparser.models.rss.Header;
  */
 
 public enum RSS2Parser implements IParser {
-	
+
 	PARSER;
 	private XMLEventReader eventReader;
+
 	public void setEventReader(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
-	
+
 	private String getString(XMLEvent event, String elementName) throws XMLStreamException {
 		String string = "";
 
@@ -45,6 +46,61 @@ public enum RSS2Parser implements IParser {
 			}
 		}
 		return string;
+	}
+
+	private Image getImage(XMLEvent event) throws XMLStreamException {
+		Image image = new Image();
+
+		while (true) {
+			event = eventReader.nextEvent();
+			if (event.isEndElement()) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSSElementName.IMAGE.getName())) {
+					break;
+				}
+			} else if (event.isStartElement()) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(RSSElementName.URL.getName())) {
+					event = eventReader.nextEvent();
+					image.setUrl(event.asCharacters().getData());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.TITLE.getName())) {
+					event = eventReader.nextEvent();
+					image.setTitle(event.asCharacters().getData());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LINK.getName())) {
+					event = eventReader.nextEvent();
+					image.setLink(event.asCharacters().getData());
+				}
+			}
+		}
+		return image;
+	}
+
+	private TextInput getTextInput(XMLEvent event) throws XMLStreamException {
+		TextInput textInput = new TextInput();
+
+		while (true) {
+			event = eventReader.nextEvent();
+			if (event.isEndElement()) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSSElementName.TEXTINPUT.getName())) {
+					break;
+				}
+			} else if (event.isStartElement()) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(RSSElementName.TITLE.getName())) {
+					event = eventReader.nextEvent();
+					textInput.setTitle(event.asCharacters().getData());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.DESCRIPTION.getName())) {
+					event = eventReader.nextEvent();
+					textInput.setDescription(event.asCharacters().getData());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.NAME.getName())) {
+					event = eventReader.nextEvent();
+					textInput.setName(event.asCharacters().getData());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LINK.getName())) {
+					event = eventReader.nextEvent();
+					textInput.setLink(event.asCharacters().getData());
+				}
+			}
+		}
+		return textInput;
 	}
 
 	public Header getHeader() throws XMLStreamException, XMLParseException {
