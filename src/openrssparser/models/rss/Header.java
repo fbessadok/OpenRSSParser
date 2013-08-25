@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Header {
-	
+
 	private String title;
 	private String link;
 	private String description;

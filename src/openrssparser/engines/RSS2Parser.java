@@ -11,6 +11,6 @@ package openrssparser.engines;
  * 
  */
 
-public class RSS2Parser {
+public class RSS2Parser implements IParser {
 
 }

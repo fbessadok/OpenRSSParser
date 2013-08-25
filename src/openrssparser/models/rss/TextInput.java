@@ -1,7 +1,7 @@
 package openrssparser.models.rss;
 
 public class TextInput {
-	
+
 	private String title;
 	private String description;
 	private String name;
@@ -38,5 +38,5 @@ public class TextInput {
 	public void setLink(String link) {
 		this.link = link;
 	}
-	
+
 }
