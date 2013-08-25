@@ -3,13 +3,19 @@ package openrssparser.engines;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.management.modelmbean.XMLParseException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
+import openrssparser.models.atom.Text;
+import openrssparser.models.rss2.Enclosure;
 import openrssparser.models.rss2.Header;
 import openrssparser.models.rss2.Image;
 import openrssparser.models.rss2.Item;
@@ -35,6 +41,16 @@ public enum RSS2Parser implements IParser {
 
 	public void setEventReader(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
+	}
+	
+	private List<Attribute> getAttributes(XMLEvent event) {
+		List<Attribute> attributes = new ArrayList<Attribute>();
+		@SuppressWarnings("unchecked")
+		Iterator<Attribute> attribute = event.asStartElement().getAttributes();
+		while (attribute.hasNext()) {
+			attributes.add(attribute.next());
+		}
+		return attributes;
 	}
 
 	private String getString(XMLEvent event, String elementName) throws XMLStreamException {
@@ -106,6 +122,12 @@ public enum RSS2Parser implements IParser {
 			}
 		}
 		return textInput;
+	}
+	
+	private Enclosure getEnclosure(XMLEvent event) throws XMLStreamException {
+		Enclosure enclosure = new Enclosure();
+		enclosure.setAttributes(getAttributes(event));
+		return enclosure;
 	}
 
 	public Header getHeader() throws XMLStreamException, XMLParseException {
@@ -217,6 +239,8 @@ public enum RSS2Parser implements IParser {
 					item.getCategories().add(getString(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.COMMENTS.getName())) {
 					item.setComments(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.ENCLOSURE.getName())) {
+					item.getEnclosure().add(getEnclosure(event));
 				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.GUID.getName())) {
 					item.setGuid(getString(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.PUBDATE.getName())) {
@@ -229,7 +253,7 @@ public enum RSS2Parser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.SOURCE.getName())) {
 					item.setSource(getString(event, currentElementName));
 				}
-			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.CHANNEL.getName())) {
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.ITEM.getName())) {
 				break;
 			}
 		}

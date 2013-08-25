@@ -1,33 +1,19 @@
 package openrssparser.models.rss2;
 
+import java.util.List;
+
+import javax.xml.stream.events.Attribute;
+
 public class Enclosure {
 
-	private String url;
-	private Long length;
-	private String type;
+	private List<Attribute> attributes;
 
-	public String getUrl() {
-		return url;
+	public List<Attribute> getAttributes() {
+		return attributes;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public Long getLength() {
-		return length;
-	}
-
-	public void setLength(Long length) {
-		this.length = length;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
 	}
 
 }
