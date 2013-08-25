@@ -42,7 +42,7 @@ public enum RSS2Parser implements IParser {
 	public void setEventReader(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
-	
+
 	private List<Attribute> getAttributes(XMLEvent event) {
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		@SuppressWarnings("unchecked")
@@ -123,7 +123,7 @@ public enum RSS2Parser implements IParser {
 		}
 		return textInput;
 	}
-	
+
 	private Enclosure getEnclosure(XMLEvent event) throws XMLStreamException {
 		Enclosure enclosure = new Enclosure();
 		enclosure.setAttributes(getAttributes(event));

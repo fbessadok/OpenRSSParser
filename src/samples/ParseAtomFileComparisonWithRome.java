@@ -35,7 +35,7 @@ public class ParseAtomFileComparisonWithRome {
 		OpenRSS.PARSER.declareFile(atomFeed);
 		Source header = (Source) OpenRSS.getInstance().getHeader();
 		while (OpenRSS.getInstance().hasEntry()) {
-			Entry entry = OpenRSS.getInstance().nextEntry();
+			Entry entry = (Entry) OpenRSS.getInstance().nextEntry();
 			entry.getAuthors();
 		}
 	}
