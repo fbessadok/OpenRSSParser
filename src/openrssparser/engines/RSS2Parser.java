@@ -1,5 +1,17 @@
 package openrssparser.engines;
 
+import javax.management.modelmbean.XMLParseException;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
+
+import openrssparser.models.rss.RSSElementName;
+import openrssparser.models.atom.Entry;
+import openrssparser.models.atom.Source;
+import openrssparser.models.atom.Text;
+import openrssparser.models.rss.Header;
+
 /*
  * RSS 2 Feed Parser
  * Following these specifications
@@ -11,6 +23,97 @@ package openrssparser.engines;
  * 
  */
 
-public class RSS2Parser implements IParser {
+public enum RSS2Parser implements IParser {
+	
+	PARSER;
+	private XMLEventReader eventReader;
+	public void setEventReader(XMLEventReader eventReader) {
+		this.eventReader = eventReader;
+	}
+	
+	private String getString(XMLEvent event, String elementName) throws XMLStreamException {
+		String string = "";
+
+		while (true) {
+			event = eventReader.nextEvent();
+			if (event.isEndElement()) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
+					break;
+				}
+			} else if (event.isCharacters()) {
+				string = event.asCharacters().getData();
+			}
+		}
+		return string;
+	}
+
+	public Header getHeader() throws XMLStreamException, XMLParseException {
+		Header header = new Header();
+
+		while (eventReader.hasNext()) {
+			XMLEvent event = eventReader.peek();
+			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(RSSElementName.ITEM.getName())) {
+				break;
+			}
+
+			event = eventReader.nextEvent();
+
+			if (event.isStartElement()) {
+				String currentElementName = event.asStartElement().getName().getLocalPart();
+				if (currentElementName.equalsIgnoreCase(RSSElementName.TITLE.getName())) {
+					header.setTitle(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LINK.getName())) {
+					header.setLink(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.DESCRIPTION.getName())) {
+					header.setDescription(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LANGUAGE.getName())) {
+					header.setLanguage(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.COPYRIGHT.getName())) {
+					header.setCopyright(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.MANAGINGEDITOR.getName())) {
+					header.setManagingEditor(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.WEBMASTER.getName())) {
+					header.setWebMaster(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.PUBDATE.getName())) {
+					header.setPubDate(DatatypeConverter.parseDateTime(getString(event, currentElementName)).getTime());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LASTBUILDDATE.getName())) {
+					header.setLastBuildDate(DatatypeConverter.parseDateTime(getString(event, currentElementName)).getTime());
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.CATEGORY.getName())) {
+					header.getCategories().add(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.GENERATOR.getName())) {
+					header.setGenerator(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.DOCS.getName())) {
+					header.setDocs(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.TTL.getName())) {
+					header.setTtl(Integer.valueOf(getString(event, currentElementName)));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.IMAGE.getName())) {
+					header.setImage(getImage(event));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.RATING.getName())) {
+					header.setRating(getString(event, currentElementName));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.TEXTINPUT.getName())) {
+					header.setTextInput(getTextInput(event));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.SKIPHOURS.getName())) {
+					header.getSkipHours().add(Integer.valueOf(getString(event, currentElementName)));
+				} else if (currentElementName.equalsIgnoreCase(RSSElementName.SKIPDAYS.getName())) {
+					header.getSkipDays().add(getString(event, currentElementName));
+				}
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSSElementName.CHANNEL.getName())) {
+				break;
+			}
+		}
+		return header;
+	}
+
+	@Override
+	public boolean hasEntry() throws XMLStreamException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Entry nextEntry() throws XMLStreamException, XMLParseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

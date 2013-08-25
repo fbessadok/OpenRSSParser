@@ -8,6 +8,7 @@ public enum RSSElementName {
 	DESCRIPTION("description"),
 	LANGUAGE("language"),
 	COPYRIGHT("copyright"),
+	MANAGINGEDITOR("managingEditor"),
 	WEBMASTER("webMaster"),
 	PUBDATE("pubDate"),
 	LASTBUILDDATE("lastBuildDate"),

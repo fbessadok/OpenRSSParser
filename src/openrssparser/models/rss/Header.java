@@ -13,8 +13,8 @@ public class Header {
 	private String managingEditor;
 	private String webMaster;
 	private Date pubDate;
-	private String lastBuildDate;
-	private List<String> category;
+	private Date lastBuildDate;
+	private List<String> categories;
 	private String generator;
 	private String docs;
 	private String cloud;
@@ -22,7 +22,7 @@ public class Header {
 	private String rating;
 	private TextInput textInput;
 	private List<Integer> skipHours;
-	private List<Integer> skipDays;
+	private List<String> skipDays;
 	private Image image;
 
 	public String getTitle() {
@@ -89,20 +89,20 @@ public class Header {
 		this.pubDate = pubDate;
 	}
 
-	public String getLastBuildDate() {
+	public Date getLastBuildDate() {
 		return lastBuildDate;
 	}
 
-	public void setLastBuildDate(String lastBuildDate) {
+	public void setLastBuildDate(Date lastBuildDate) {
 		this.lastBuildDate = lastBuildDate;
 	}
 
-	public List<String> getCategory() {
-		return category;
+	public List<String> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(List<String> category) {
-		this.category = category;
+	public void setCategories(List<String> categories) {
+		this.categories = categories;
 	}
 
 	public String getGenerator() {
@@ -161,11 +161,11 @@ public class Header {
 		this.skipHours = skipHours;
 	}
 
-	public List<Integer> getSkipDays() {
+	public List<String> getSkipDays() {
 		return skipDays;
 	}
 
-	public void setSkipDays(List<Integer> skipDays) {
+	public void setSkipDays(List<String> skipDays) {
 		this.skipDays = skipDays;
 	}
 

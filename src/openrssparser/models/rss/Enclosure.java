@@ -3,7 +3,7 @@ package openrssparser.models.rss;
 public class Enclosure {
 
 	private String url;
-	private long length;
+	private Long length;
 	private String type;
 
 	public String getUrl() {
@@ -14,11 +14,11 @@ public class Enclosure {
 		this.url = url;
 	}
 
-	public long getLength() {
+	public Long getLength() {
 		return length;
 	}
 
-	public void setLength(long length) {
+	public void setLength(Long length) {
 		this.length = length;
 	}
 
