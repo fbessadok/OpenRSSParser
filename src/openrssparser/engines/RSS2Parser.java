@@ -14,7 +14,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import openrssparser.models.atom.Text;
 import openrssparser.models.rss2.Enclosure;
 import openrssparser.models.rss2.Header;
 import openrssparser.models.rss2.Image;
