@@ -12,7 +12,7 @@ public class ParseURL {
 			for (int i = 1; i <= 17; i++) {
 				long begin = System.currentTimeMillis();
 				OpenRSS.PARSER.declareURL(atomFeed);
-				Source header = OpenRSS.getInstance().getHeader();
+				Source header = (Source) OpenRSS.getInstance().getHeader();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
 			}

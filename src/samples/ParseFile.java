@@ -11,7 +11,7 @@ public class ParseFile {
 			for (int i = 1; i <= 17; i++) {
 				long begin = System.currentTimeMillis();
 				OpenRSS.PARSER.declareFile(atomFeed);
-				Source header = OpenRSS.getInstance().getHeader();
+				Source header = (Source) OpenRSS.getInstance().getHeader();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
 			}

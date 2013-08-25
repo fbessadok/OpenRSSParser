@@ -33,7 +33,7 @@ public class ParseFileComparisonWithRome {
 	
 	public static void parseWithOpenRSSParser(String atomFeed) throws Exception {
 		OpenRSS.PARSER.declareFile(atomFeed);
-		Source header = OpenRSS.getInstance().getHeader();
+		Source header = (Source) OpenRSS.getInstance().getHeader();
 		while (OpenRSS.getInstance().hasEntry()) {
 			Entry entry = OpenRSS.getInstance().nextEntry();
 			entry.getAuthors();
