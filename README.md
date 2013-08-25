@@ -6,6 +6,7 @@ Created on august 23th, 2013, it's obviously extremely small and not usable in r
 ## Current Version
 
 For now it supports
+
 	* Atom feeds as described in the [RFC4287](http://www.ietf.org/rfc/rfc4287.txt) specification
 	* RSS 2 feeds as described in [Harvard](http://cyber.law.harvard.edu/tech/rss) specification
 
