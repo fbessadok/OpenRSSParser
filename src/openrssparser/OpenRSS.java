@@ -12,11 +12,12 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import openrssparser.models.atom.Entry;
-import openrssparser.models.atom.Source;
 import openrssparser.engines.AtomParser;
 import openrssparser.engines.FeedType;
 import openrssparser.engines.IParser;
+import openrssparser.engines.RSS2Parser;
+import openrssparser.models.atom.Entry;
+import openrssparser.models.atom.Source;
 
 public enum OpenRSS implements IParser {
 	PARSER;
@@ -52,13 +53,16 @@ public enum OpenRSS implements IParser {
 	}
 	
 	private FeedType getFeedType() {
-		return FeedType.ATOM;
+		return FeedType.RSS;
 	}
 	
 	private void createInstance() {
 		if (getFeedType().equals(FeedType.ATOM)) {
 			AtomParser.PARSER.setEventReader(eventReader);
 			realParser = AtomParser.PARSER;
+		} else if (getFeedType().equals(FeedType.RSS)) {
+			RSS2Parser.PARSER.setEventReader(eventReader);
+			realParser = RSS2Parser.PARSER;
 		}
 	}
 

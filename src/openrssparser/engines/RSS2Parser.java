@@ -1,7 +1,11 @@
 package openrssparser.engines;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import javax.management.modelmbean.XMLParseException;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
@@ -116,6 +120,7 @@ public enum RSS2Parser implements IParser {
 
 			if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
+				DateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
 				if (currentElementName.equalsIgnoreCase(RSSElementName.TITLE.getName())) {
 					header.setTitle(getString(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LINK.getName())) {
@@ -131,9 +136,19 @@ public enum RSS2Parser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.WEBMASTER.getName())) {
 					header.setWebMaster(getString(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.PUBDATE.getName())) {
-					header.setPubDate(DatatypeConverter.parseDateTime(getString(event, currentElementName)).getTime());
+					try {
+						header.setPubDate(formatter.parse(getString(event, currentElementName)));
+					} catch (ParseException e) {
+						header.setPubDate(null);
+						e.printStackTrace();
+					}
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.LASTBUILDDATE.getName())) {
-					header.setLastBuildDate(DatatypeConverter.parseDateTime(getString(event, currentElementName)).getTime());
+					try {
+						header.setLastBuildDate(formatter.parse(getString(event, currentElementName)));
+					} catch (ParseException e) {
+						header.setLastBuildDate(null);
+						e.printStackTrace();
+					}
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.CATEGORY.getName())) {
 					header.getCategories().add(getString(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(RSSElementName.GENERATOR.getName())) {

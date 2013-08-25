@@ -11,7 +11,7 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 
-public class ParseFileComparisonWithRome {
+public class ParseAtomFileComparisonWithRome {
 
 	public static void main(String args[]) {
 		String atomFeed = System.getProperty("user.dir") + "/src/samples/atom1.xml";
