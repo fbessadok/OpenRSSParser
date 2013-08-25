@@ -1,4 +1,4 @@
-package openrssparser.models.rss;
+package openrssparser.models.rss2;
 
 import java.util.Date;
 import java.util.List;

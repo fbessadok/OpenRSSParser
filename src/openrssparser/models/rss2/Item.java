@@ -1,4 +1,4 @@
-package openrssparser.models.rss;
+package openrssparser.models.rss2;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +8,7 @@ public class Item {
 	private String title;
 	private String link;
 	private String description;
-	private List<String> category;
+	private List<String> categories;
 	private String comments;
 	private List<Enclosure> enclosure;
 	private String guid;
@@ -40,12 +40,12 @@ public class Item {
 		this.description = description;
 	}
 
-	public List<String> getCategory() {
-		return category;
+	public List<String> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(List<String> category) {
-		this.category = category;
+	public void setCategories(List<String> categories) {
+		this.categories = categories;
 	}
 
 	public String getComments() {

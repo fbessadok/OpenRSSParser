@@ -1,4 +1,4 @@
-package openrssparser.models.rss;
+package openrssparser.models.rss2;
 
 public class Image {
 

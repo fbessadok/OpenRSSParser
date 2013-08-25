@@ -12,6 +12,6 @@ public interface IParser {
 	
 	boolean hasEntry() throws XMLStreamException;
 	
-	Entry nextEntry() throws XMLStreamException, XMLParseException;
+	Object nextEntry() throws XMLStreamException, XMLParseException;
 
 }

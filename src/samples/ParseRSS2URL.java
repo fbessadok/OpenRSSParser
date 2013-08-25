@@ -1,7 +1,7 @@
 package samples;
 
 import openrssparser.OpenRSS;
-import openrssparser.models.rss.Header;
+import openrssparser.models.rss2.Header;
 
 public class ParseRSS2URL {
 
