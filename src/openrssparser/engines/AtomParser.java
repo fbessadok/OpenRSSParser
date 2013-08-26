@@ -35,7 +35,7 @@ import openrssparser.models.common.interfaces.IHeader;
 public class AtomParser implements IParser {
 
 	private XMLEventReader eventReader;
-	
+
 	public AtomParser(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
@@ -309,7 +309,7 @@ public class AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
 					entry.getLinks().add(getSimpleElement(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PUBLISHED.getName())) {
-					entry.setUpdated(getAtomDate(event, currentElementName));
+					entry.setPublished(getAtomDate(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
 					entry.setRights(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.SOURCE.getName())) {
@@ -325,7 +325,7 @@ public class AtomParser implements IParser {
 				break;
 			}
 		}
-		return entry;
+		return entry.toCommon();
 	}
 
 }

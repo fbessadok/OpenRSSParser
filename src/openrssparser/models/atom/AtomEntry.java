@@ -1,7 +1,6 @@
 package openrssparser.models.atom;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import openrssparser.models.common.Entry;
@@ -42,7 +41,7 @@ public class AtomEntry extends AtomElement implements IEntry {
 	private List<AtomPerson> contributors = new ArrayList<AtomPerson>();
 	private AtomText id;
 	private List<AtomSimpleElement> links = new ArrayList<AtomSimpleElement>();
-	private Date published;
+	private AtomDate published;
 	private AtomText rights;
 	private AtomSource source;
 	private AtomText summary;
@@ -97,11 +96,11 @@ public class AtomEntry extends AtomElement implements IEntry {
 		this.links = links;
 	}
 
-	public Date getPublished() {
+	public AtomDate getPublished() {
 		return published;
 	}
 
-	public void setPublished(Date published) {
+	public void setPublished(AtomDate published) {
 		this.published = published;
 	}
 
@@ -163,7 +162,21 @@ public class AtomEntry extends AtomElement implements IEntry {
 				}
 			}
 		}
+		common.setTitle(title.getText());
+		for (AtomSimpleElement link : links) {
+			for (int i = 0; i < link.getAttributes().size(); i++) {
+				if (link.getAttributes().get(i).getName().equals("href")) {
+					common.setUrl(link.getAttributes().get(i).getValue());
+					break;
+				}
+			}
+			if (common.getUrl() != null) {
+				break;
+			}
+		}
+		common.setDescription(summary.getText());
+		common.setPublicationDate(published.getDate());
+		common.setModificationDate(updated.getDate());
 		return common;
 	}
-
 }

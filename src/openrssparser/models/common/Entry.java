@@ -5,7 +5,7 @@ import java.util.List;
 
 import openrssparser.models.common.interfaces.IEntry;
 
-public class Entry {
+public class Entry implements IEntry {
 
 	private IEntry initial;
 
@@ -15,7 +15,6 @@ public class Entry {
 	private String title;
 	private String url;
 	private String description;
-	private String summary;
 	private Date publicationDate;
 	private Date modificationDate;
 
@@ -73,14 +72,6 @@ public class Entry {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
 	}
 
 	public Date getPublicationDate() {
