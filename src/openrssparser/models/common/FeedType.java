@@ -2,6 +2,6 @@ package openrssparser.models.common;
 
 public enum FeedType {
 	
-	ATOM, RSS;
+	ATOM, RSS2;
 
 }

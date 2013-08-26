@@ -11,33 +11,40 @@ import javax.management.modelmbean.XMLParseException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 
 import openrssparser.engines.AtomParser;
 import openrssparser.engines.IParser;
 import openrssparser.engines.Rss2Parser;
+import openrssparser.models.atom.AtomElementName;
 import openrssparser.models.common.Entry;
 import openrssparser.models.common.FeedType;
 import openrssparser.models.common.Header;
+import openrssparser.models.rss2.Rss2ElementName;
 
 public class OpenRssParser implements IParser {
 
 	private static IParser commonParser;
 	private XMLEventReader eventReader;
-
+	private FeedType feedType;
 	
+	public FeedType getFeedType() {
+		return feedType;
+	}
+
 	public void declareFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		eventReader = inputFactory.createXMLEventReader(new FileReader(feedUrl));
-		createInstance();
+		createInstance(inputFactory.createXMLEventReader(new FileReader(feedUrl)));
 	}
 
 	public void declareURL(String feedUrl) throws XMLStreamException, FileNotFoundException, MalformedURLException {
 		URL url = new URL(feedUrl);
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		eventReader = inputFactory.createXMLEventReader(read(url));
-		createInstance();
+		createInstance(inputFactory.createXMLEventReader(read(url)));
 	}
-	
+
 	private InputStream read(URL url) {
 		try {
 			return url.openStream();
@@ -45,16 +52,21 @@ public class OpenRssParser implements IParser {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	private FeedType getFeedType() {
-		return FeedType.ATOM;
-	}
-	
-	private void createInstance() {
-		if (getFeedType().equals(FeedType.ATOM)) {
-			commonParser = new AtomParser(eventReader);
-		} else if (getFeedType().equals(FeedType.RSS)) {
-			commonParser = new Rss2Parser(eventReader);
+
+	private void createInstance(XMLEventReader reader) throws XMLStreamException {
+		while (eventReader.hasNext()) {
+			XMLEvent event = eventReader.nextEvent();
+			if (event.isStartElement()) {
+				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
+					this.feedType = FeedType.ATOM;
+					commonParser = new AtomParser(eventReader);
+					break;
+				} else if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.CHANNEL.getName())) {
+					this.feedType = FeedType.RSS2;
+					commonParser = new Rss2Parser(eventReader);
+					break;
+				}
+			}
 		}
 	}
 

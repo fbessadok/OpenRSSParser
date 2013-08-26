@@ -142,7 +142,10 @@ public class AtomSource extends AtomElement implements IHeader {
 		Header common = new Header();
 		common.setInitial(this);
 		for (AtomPerson author : authors) {
-			Person authorCommon = new Person(author.getName(), author.getEmail().getText(), author.getUrl().getText());
+			String name = author.getName() == null ? "" : author.getName();
+			String email = author.getEmail() == null ? "" : author.getEmail().getText();
+			String url = author.getUrl() == null ? "" : author.getUrl().getText();
+			Person authorCommon = new Person(name, email, url);
 			common.getAuthors().add(authorCommon);
 		}
 		for (AtomCategory category : categories) {
