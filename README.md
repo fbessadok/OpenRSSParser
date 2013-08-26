@@ -23,7 +23,7 @@ All cases are not yet implemented but most of them are; And the code is voluntar
 **Example**
 
     OpenRssParser myParser = new OpenRssParser();
-    myParser.declareFile(feedUrl/feedPath);
+    myParser.declareFile(feedPath); // Or myParser.declareURL(feedUrl);
     Header header = myParser.getHeader();
     while (myParser.hasEntry()) {
       Entry entry = myParser.nextEntry();
