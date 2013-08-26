@@ -185,7 +185,7 @@ public class Rss2Header implements IHeader {
 	public Header toCommon() {
 		Header common = new Header();
 		common.setInitial(this);
-		common.getAuthors().add(new Person(managingEditor));
+		common.getAuthors().add(new Person("", managingEditor, ""));
 		for (String category : categories) {
 			common.getCategories().add(category);
 		}

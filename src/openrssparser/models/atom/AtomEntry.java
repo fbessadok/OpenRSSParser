@@ -148,12 +148,15 @@ public class AtomEntry extends AtomElement implements IEntry {
 		Entry common = new Entry();
 		common.setInitial(this);
 		for (AtomPerson author : authors) {
-			Person authorCommon = new Person(author.getName(), author.getEmail().getText(), author.getUrl().getText());
+			String name = author.getName() == null ? "" : author.getName();
+			String email = author.getEmail() == null ? "" : author.getEmail().getText();
+			String url = author.getUrl() == null ? "" : author.getUrl().getText();
+			Person authorCommon = new Person(name, email, url);
 			common.getAuthors().add(authorCommon);
 		}
 		for (AtomCategory category : categories) {
 			for (int i = 0; i < category.getAttributes().size(); i++) {
-				if (category.getAttributes().get(i).getName().equals("term")) {
+				if (category.getAttributes() != null && category.getAttributes().get(i).getName().equals("term")) {
 					common.getCategories().add(category.getAttributes().get(i).getValue());
 				}
 			}
@@ -163,7 +166,7 @@ public class AtomEntry extends AtomElement implements IEntry {
 		}
 		for (AtomSimpleElement link : links) {
 			for (int i = 0; i < link.getAttributes().size(); i++) {
-				if (link.getAttributes().get(i).getName().equals("href")) {
+				if (link.getAttributes() != null && link.getAttributes().get(i).getName().equals("href")) {
 					common.setUrl(link.getAttributes().get(i).getValue());
 					break;
 				}

@@ -5,15 +5,7 @@ public class Person {
 	private String name;
 	private String email;
 	private String url;
-
-	public Person(String email) {
-		this("", email, "");
-	}
 	
-	public Person(String name, String email) {
-		this(name, email, "");
-	}
-
 	public Person(String name, String email, String url) {
 		this.name = name;
 		this.email = email;

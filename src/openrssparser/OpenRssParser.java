@@ -47,7 +47,7 @@ public class OpenRssParser implements IParser {
 	}
 	
 	private FeedType getFeedType() {
-		return FeedType.RSS;
+		return FeedType.ATOM;
 	}
 	
 	private void createInstance() {

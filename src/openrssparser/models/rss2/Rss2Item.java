@@ -105,7 +105,7 @@ public class Rss2Item implements IEntry {
 		Entry common = new Entry();
 		common.setInitial(this);
 		if (author != null) {
-			common.getAuthors().add(new Person(author.getName(), author.getEmail()));
+			common.getAuthors().add(new Person(author.getName(), author.getEmail(), ""));
 		}
 		for (String category : categories) {
 			common.getCategories().add(category);
