@@ -3,18 +3,20 @@ package openrssparser.models.rss2;
 import java.util.Date;
 import java.util.List;
 
-public class Item {
+import openrssparser.models.common.interfaces.IEntry;
+
+public class Rss2Item implements IEntry {
 
 	private String title;
 	private String link;
 	private String description;
 	private List<String> categories;
 	private String comments;
-	private List<Enclosure> enclosure;
+	private List<Rss2Enclosure> enclosure;
 	private String guid;
 	private Date pubDate;
 	private String source;
-	private Person author;
+	private Rss2Person author;
 
 	public String getTitle() {
 		return title;
@@ -56,11 +58,11 @@ public class Item {
 		this.comments = comments;
 	}
 
-	public List<Enclosure> getEnclosure() {
+	public List<Rss2Enclosure> getEnclosure() {
 		return enclosure;
 	}
 
-	public void setEnclosure(List<Enclosure> enclosure) {
+	public void setEnclosure(List<Rss2Enclosure> enclosure) {
 		this.enclosure = enclosure;
 	}
 
@@ -88,11 +90,11 @@ public class Item {
 		this.source = source;
 	}
 
-	public Person getAuthor() {
+	public Rss2Person getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Person author) {
+	public void setAuthor(Rss2Person author) {
 		this.author = author;
 	}
 

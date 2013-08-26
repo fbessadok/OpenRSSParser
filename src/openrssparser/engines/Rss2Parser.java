@@ -14,13 +14,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import openrssparser.models.rss2.Enclosure;
-import openrssparser.models.rss2.Header;
-import openrssparser.models.rss2.Image;
-import openrssparser.models.rss2.Item;
-import openrssparser.models.rss2.Person;
-import openrssparser.models.rss2.RSS2ElementName;
-import openrssparser.models.rss2.TextInput;
+import openrssparser.models.rss2.Rss2Enclosure;
+import openrssparser.models.rss2.Rss2Header;
+import openrssparser.models.rss2.Rss2Image;
+import openrssparser.models.rss2.Rss2Item;
+import openrssparser.models.rss2.Rss2Person;
+import openrssparser.models.rss2.Rss2ElementName;
+import openrssparser.models.rss2.Rss2TextInput;
 
 /*
  * RSS 2 Feed Parser
@@ -33,7 +33,7 @@ import openrssparser.models.rss2.TextInput;
  * 
  */
 
-public enum RSS2Parser implements IParser {
+public enum Rss2Parser implements IParser {
 
 	PARSER;
 	private XMLEventReader eventReader;
@@ -68,24 +68,24 @@ public enum RSS2Parser implements IParser {
 		return string;
 	}
 
-	private Image getImage(XMLEvent event) throws XMLStreamException {
-		Image image = new Image();
+	private Rss2Image getImage(XMLEvent event) throws XMLStreamException {
+		Rss2Image image = new Rss2Image();
 
 		while (true) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.IMAGE.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.IMAGE.getName())) {
 					break;
 				}
 			} else if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
-				if (currentElementName.equalsIgnoreCase(RSS2ElementName.URL.getName())) {
+				if (currentElementName.equalsIgnoreCase(Rss2ElementName.URL.getName())) {
 					event = eventReader.nextEvent();
 					image.setUrl(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.TITLE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.TITLE.getName())) {
 					event = eventReader.nextEvent();
 					image.setTitle(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LINK.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LINK.getName())) {
 					event = eventReader.nextEvent();
 					image.setLink(event.asCharacters().getData());
 				}
@@ -94,27 +94,27 @@ public enum RSS2Parser implements IParser {
 		return image;
 	}
 
-	private TextInput getTextInput(XMLEvent event) throws XMLStreamException {
-		TextInput textInput = new TextInput();
+	private Rss2TextInput getTextInput(XMLEvent event) throws XMLStreamException {
+		Rss2TextInput textInput = new Rss2TextInput();
 
 		while (true) {
 			event = eventReader.nextEvent();
 			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.TEXTINPUT.getName())) {
+				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.TEXTINPUT.getName())) {
 					break;
 				}
 			} else if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
-				if (currentElementName.equalsIgnoreCase(RSS2ElementName.TITLE.getName())) {
+				if (currentElementName.equalsIgnoreCase(Rss2ElementName.TITLE.getName())) {
 					event = eventReader.nextEvent();
 					textInput.setTitle(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.DESCRIPTION.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.DESCRIPTION.getName())) {
 					event = eventReader.nextEvent();
 					textInput.setDescription(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.NAME.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.NAME.getName())) {
 					event = eventReader.nextEvent();
 					textInput.setName(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LINK.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LINK.getName())) {
 					event = eventReader.nextEvent();
 					textInput.setLink(event.asCharacters().getData());
 				}
@@ -123,18 +123,18 @@ public enum RSS2Parser implements IParser {
 		return textInput;
 	}
 
-	private Enclosure getEnclosure(XMLEvent event) throws XMLStreamException {
-		Enclosure enclosure = new Enclosure();
+	private Rss2Enclosure getEnclosure(XMLEvent event) throws XMLStreamException {
+		Rss2Enclosure enclosure = new Rss2Enclosure();
 		enclosure.setAttributes(getAttributes(event));
 		return enclosure;
 	}
 
-	public Header getHeader() throws XMLStreamException, XMLParseException {
-		Header header = new Header();
+	public Rss2Header getHeader() throws XMLStreamException, XMLParseException {
+		Rss2Header header = new Rss2Header();
 
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
-			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.ITEM.getName())) {
+			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.ITEM.getName())) {
 				break;
 			}
 
@@ -143,54 +143,54 @@ public enum RSS2Parser implements IParser {
 			if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
 				DateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-				if (currentElementName.equalsIgnoreCase(RSS2ElementName.TITLE.getName())) {
+				if (currentElementName.equalsIgnoreCase(Rss2ElementName.TITLE.getName())) {
 					header.setTitle(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LINK.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LINK.getName())) {
 					header.setLink(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.DESCRIPTION.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.DESCRIPTION.getName())) {
 					header.setDescription(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LANGUAGE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LANGUAGE.getName())) {
 					header.setLanguage(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.COPYRIGHT.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.COPYRIGHT.getName())) {
 					header.setCopyright(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.MANAGINGEDITOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.MANAGINGEDITOR.getName())) {
 					header.setManagingEditor(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.WEBMASTER.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.WEBMASTER.getName())) {
 					header.setWebMaster(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.PUBDATE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.PUBDATE.getName())) {
 					try {
 						header.setPubDate(formatter.parse(getString(event, currentElementName)));
 					} catch (ParseException e) {
 						header.setPubDate(null);
 						e.printStackTrace();
 					}
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LASTBUILDDATE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LASTBUILDDATE.getName())) {
 					try {
 						header.setLastBuildDate(formatter.parse(getString(event, currentElementName)));
 					} catch (ParseException e) {
 						header.setLastBuildDate(null);
 						e.printStackTrace();
 					}
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.CATEGORY.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.CATEGORY.getName())) {
 					header.getCategories().add(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.GENERATOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.GENERATOR.getName())) {
 					header.setGenerator(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.DOCS.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.DOCS.getName())) {
 					header.setDocs(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.TTL.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.TTL.getName())) {
 					header.setTtl(Integer.valueOf(getString(event, currentElementName)));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.IMAGE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.IMAGE.getName())) {
 					header.setImage(getImage(event));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.RATING.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.RATING.getName())) {
 					header.setRating(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.TEXTINPUT.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.TEXTINPUT.getName())) {
 					header.setTextInput(getTextInput(event));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.SKIPHOURS.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.SKIPHOURS.getName())) {
 					header.getSkipHours().add(Integer.valueOf(getString(event, currentElementName)));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.SKIPDAYS.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.SKIPDAYS.getName())) {
 					header.getSkipDays().add(getString(event, currentElementName));
 				}
-			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.CHANNEL.getName())) {
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.CHANNEL.getName())) {
 				break;
 			}
 		}
@@ -201,7 +201,7 @@ public enum RSS2Parser implements IParser {
 	public boolean hasEntry() throws XMLStreamException {
 		if (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
-			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.ITEM.getName())) {
+			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.ITEM.getName())) {
 				return true;
 			}
 		}
@@ -209,8 +209,8 @@ public enum RSS2Parser implements IParser {
 	}
 
 	@Override
-	public Item nextEntry() throws XMLStreamException, XMLParseException {
-		Item item = new Item();
+	public Rss2Item nextEntry() throws XMLStreamException, XMLParseException {
+		Rss2Item item = new Rss2Item();
 
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.nextEvent();
@@ -218,41 +218,41 @@ public enum RSS2Parser implements IParser {
 			if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
 				DateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-				if (currentElementName.equalsIgnoreCase(RSS2ElementName.TITLE.getName())) {
+				if (currentElementName.equalsIgnoreCase(Rss2ElementName.TITLE.getName())) {
 					item.setTitle(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.LINK.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.LINK.getName())) {
 					item.setLink(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.DESCRIPTION.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.DESCRIPTION.getName())) {
 					item.setDescription(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.AUTHOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.AUTHOR.getName())) {
 					if (item.getAuthor() == null) {
-						item.setAuthor(new Person());
+						item.setAuthor(new Rss2Person());
 					}
 					item.getAuthor().setEmail(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.CREATOR.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.CREATOR.getName())) {
 					if (item.getAuthor() == null) {
-						item.setAuthor(new Person());
+						item.setAuthor(new Rss2Person());
 					}
 					item.getAuthor().setName(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.CATEGORY.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.CATEGORY.getName())) {
 					item.getCategories().add(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.COMMENTS.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.COMMENTS.getName())) {
 					item.setComments(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.ENCLOSURE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.ENCLOSURE.getName())) {
 					item.getEnclosure().add(getEnclosure(event));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.GUID.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.GUID.getName())) {
 					item.setGuid(getString(event, currentElementName));
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.PUBDATE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.PUBDATE.getName())) {
 					try {
 						item.setPubDate(formatter.parse(getString(event, currentElementName)));
 					} catch (ParseException e) {
 						item.setPubDate(null);
 						e.printStackTrace();
 					}
-				} else if (currentElementName.equalsIgnoreCase(RSS2ElementName.SOURCE.getName())) {
+				} else if (currentElementName.equalsIgnoreCase(Rss2ElementName.SOURCE.getName())) {
 					item.setSource(getString(event, currentElementName));
 				}
-			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(RSS2ElementName.ITEM.getName())) {
+			} else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(Rss2ElementName.ITEM.getName())) {
 				break;
 			}
 		}

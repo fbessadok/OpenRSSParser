@@ -12,7 +12,7 @@ package openrssparser.models.atom;
       }
  */
 
-public class Category extends Element {
+public class AtomCategory extends AtomElement {
 
 	private String undefinedContent;
 

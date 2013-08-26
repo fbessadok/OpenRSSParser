@@ -3,7 +3,9 @@ package openrssparser.models.rss2;
 import java.util.Date;
 import java.util.List;
 
-public class Header {
+import openrssparser.models.common.interfaces.IHeader;
+
+public class Rss2Header implements IHeader {
 
 	private String title;
 	private String link;
@@ -20,10 +22,10 @@ public class Header {
 	private String cloud;
 	private Integer ttl;
 	private String rating;
-	private TextInput textInput;
+	private Rss2TextInput textInput;
 	private List<Integer> skipHours;
 	private List<String> skipDays;
-	private Image image;
+	private Rss2Image image;
 
 	public String getTitle() {
 		return title;
@@ -145,11 +147,11 @@ public class Header {
 		this.rating = rating;
 	}
 
-	public TextInput getTextInput() {
+	public Rss2TextInput getTextInput() {
 		return textInput;
 	}
 
-	public void setTextInput(TextInput textInput) {
+	public void setTextInput(Rss2TextInput textInput) {
 		this.textInput = textInput;
 	}
 
@@ -169,11 +171,11 @@ public class Header {
 		this.skipDays = skipDays;
 	}
 
-	public Image getImage() {
+	public Rss2Image getImage() {
 		return image;
 	}
 
-	public void setImage(Image image) {
+	public void setImage(Rss2Image image) {
 		this.image = image;
 	}
 

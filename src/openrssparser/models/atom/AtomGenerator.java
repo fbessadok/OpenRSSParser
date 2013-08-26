@@ -9,7 +9,7 @@ package openrssparser.models.atom;
    }
  */
 
-public class Generator extends Element {
+public class AtomGenerator extends AtomElement {
 
 	private String uri;
 	private String version;

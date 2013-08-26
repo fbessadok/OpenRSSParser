@@ -1,4 +1,4 @@
-package openrssparser.engines;
+package openrssparser.models.common;
 
 public enum FeedType {
 	

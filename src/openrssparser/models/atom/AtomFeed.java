@@ -28,24 +28,24 @@ import java.util.List;
  * 	}
  */
 
-public class Feed extends Element {
+public class AtomFeed extends AtomElement {
 
-	private Source header = new Source();
-	private List<Entry> entries = new ArrayList<Entry>();
+	private AtomSource header = new AtomSource();
+	private List<AtomEntry> entries = new ArrayList<AtomEntry>();
 
-	public Source getHeader() {
+	public AtomSource getHeader() {
 		return header;
 	}
 
-	public void setHeader(Source header) {
+	public void setHeader(AtomSource header) {
 		this.header = header;
 	}
 
-	public List<Entry> getEntries() {
+	public List<AtomEntry> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(List<Entry> entries) {
+	public void setEntries(List<AtomEntry> entries) {
 		this.entries = entries;
 	}
 

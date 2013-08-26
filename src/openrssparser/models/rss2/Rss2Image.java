@@ -1,6 +1,6 @@
 package openrssparser.models.rss2;
 
-public class Image {
+public class Rss2Image {
 
 	private String url;
 	private String title;

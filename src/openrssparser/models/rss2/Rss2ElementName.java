@@ -1,6 +1,6 @@
 package openrssparser.models.rss2;
 
-public enum RSS2ElementName {
+public enum Rss2ElementName {
 
 	CHANNEL("channel"),
 	TITLE("title"),
@@ -34,7 +34,7 @@ public enum RSS2ElementName {
 
 	private String name;
 
-	RSS2ElementName(String name) {
+	Rss2ElementName(String name) {
 		this.name = name;
 	}
 

@@ -13,13 +13,13 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import openrssparser.engines.AtomParser;
-import openrssparser.engines.FeedType;
 import openrssparser.engines.IParser;
-import openrssparser.engines.RSS2Parser;
-import openrssparser.models.atom.Entry;
-import openrssparser.models.atom.Source;
+import openrssparser.engines.Rss2Parser;
+import openrssparser.models.atom.AtomEntry;
+import openrssparser.models.atom.AtomSource;
+import openrssparser.models.common.FeedType;
 
-public enum OpenRSS implements IParser {
+public enum OpenRss implements IParser {
 	PARSER;
 	private static IParser realParser;
 	private XMLEventReader eventReader;
@@ -61,13 +61,13 @@ public enum OpenRSS implements IParser {
 			AtomParser.PARSER.setEventReader(eventReader);
 			realParser = AtomParser.PARSER;
 		} else if (getFeedType().equals(FeedType.RSS)) {
-			RSS2Parser.PARSER.setEventReader(eventReader);
-			realParser = RSS2Parser.PARSER;
+			Rss2Parser.PARSER.setEventReader(eventReader);
+			realParser = Rss2Parser.PARSER;
 		}
 	}
 
 	@Override
-	public Source getHeader() throws XMLStreamException, XMLParseException {
+	public AtomSource getHeader() throws XMLStreamException, XMLParseException {
 		return null;
 	}
 
@@ -77,7 +77,7 @@ public enum OpenRSS implements IParser {
 	}
 
 	@Override
-	public Entry nextEntry() throws XMLStreamException, XMLParseException {
+	public AtomEntry nextEntry() throws XMLStreamException, XMLParseException {
 		return null;
 	}
 

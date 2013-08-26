@@ -1,12 +1,13 @@
-package openrssparser.models.rss2;
+package openrssparser.models.atom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.events.Attribute;
 
-public class Enclosure {
+public class AtomElement {
 
-	private List<Attribute> attributes;
+	private List<Attribute> attributes = new ArrayList<Attribute>();
 
 	public List<Attribute> getAttributes() {
 		return attributes;

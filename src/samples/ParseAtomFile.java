@@ -1,7 +1,7 @@
 package samples;
 
-import openrssparser.OpenRSS;
-import openrssparser.models.atom.Source;
+import openrssparser.OpenRss;
+import openrssparser.models.atom.AtomSource;
 
 public class ParseAtomFile {
 
@@ -10,8 +10,8 @@ public class ParseAtomFile {
 		try {
 			for (int i = 1; i <= 17; i++) {
 				long begin = System.currentTimeMillis();
-				OpenRSS.PARSER.declareFile(atomFeed);
-				Source header = (Source) OpenRSS.getInstance().getHeader();
+				OpenRss.PARSER.declareFile(atomFeed);
+				AtomSource header = (AtomSource) OpenRss.getInstance().getHeader();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
 			}

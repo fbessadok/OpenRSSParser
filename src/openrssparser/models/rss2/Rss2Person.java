@@ -1,6 +1,6 @@
 package openrssparser.models.rss2;
 
-public class Person {
+public class Rss2Person {
 
 	private String name;
 	private String email;

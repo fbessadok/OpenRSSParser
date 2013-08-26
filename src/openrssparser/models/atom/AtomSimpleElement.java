@@ -1,6 +1,8 @@
 package openrssparser.models.atom;
 
-public class Text extends Element {
+public class AtomSimpleElement extends AtomElement {
+	
+	// TODO maybe transform this in an interface and create the 4 other Content types
 
 	private String text;
 
@@ -11,5 +13,6 @@ public class Text extends Element {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
 
 }

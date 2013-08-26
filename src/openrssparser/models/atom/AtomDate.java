@@ -2,7 +2,7 @@ package openrssparser.models.atom;
 
 import java.util.Date;
 
-public class AtomDate extends Element {
+public class AtomDate extends AtomElement {
 
 	private Date date;
 

@@ -1,6 +1,6 @@
 package openrssparser.models.rss2;
 
-public class TextInput {
+public class Rss2TextInput {
 
 	private String title;
 	private String description;

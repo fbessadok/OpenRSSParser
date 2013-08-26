@@ -9,11 +9,11 @@ package openrssparser.models.atom;
        & extensionElement*)
  */
 
-public class Person extends Element {
+public class AtomPerson extends AtomElement {
 
 	private String name;
-	private Text uri;
-	private Text email;
+	private AtomText uri;
+	private AtomText email;
 
 	public String getName() {
 		return name;
@@ -23,19 +23,19 @@ public class Person extends Element {
 		this.name = name;
 	}
 
-	public Text getUri() {
+	public AtomText getUri() {
 		return uri;
 	}
 
-	public void setUri(Text uri) {
+	public void setUri(AtomText uri) {
 		this.uri = uri;
 	}
 
-	public Text getEmail() {
+	public AtomText getEmail() {
 		return email;
 	}
 
-	public void setEmail(Text email) {
+	public void setEmail(AtomText email) {
 		this.email = email;
 	}
 

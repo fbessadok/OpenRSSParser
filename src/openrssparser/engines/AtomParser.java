@@ -13,13 +13,13 @@ import javax.xml.stream.events.XMLEvent;
 
 import openrssparser.models.atom.AtomDate;
 import openrssparser.models.atom.AtomElementName;
-import openrssparser.models.atom.Category;
-import openrssparser.models.atom.Entry;
-import openrssparser.models.atom.Generator;
-import openrssparser.models.atom.Person;
-import openrssparser.models.atom.SimpleElement;
-import openrssparser.models.atom.Source;
-import openrssparser.models.atom.Text;
+import openrssparser.models.atom.AtomCategory;
+import openrssparser.models.atom.AtomEntry;
+import openrssparser.models.atom.AtomGenerator;
+import openrssparser.models.atom.AtomPerson;
+import openrssparser.models.atom.AtomSimpleElement;
+import openrssparser.models.atom.AtomSource;
+import openrssparser.models.atom.AtomText;
 
 /*
  * Atom Feed Parser
@@ -48,8 +48,8 @@ public enum AtomParser implements IParser {
 		return attributes;
 	}
 
-	private Person getPerson(XMLEvent event, String elementName) throws XMLStreamException {
-		Person person = new Person();
+	private AtomPerson getPerson(XMLEvent event, String elementName) throws XMLStreamException {
+		AtomPerson person = new AtomPerson();
 		person.setAttributes(getAttributes(event));
 
 		while (true) {
@@ -64,13 +64,13 @@ public enum AtomParser implements IParser {
 					event = eventReader.nextEvent();
 					person.setName(event.asCharacters().getData());
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONEMAIL.getName())) {
-					Text email = new Text();
+					AtomText email = new AtomText();
 					email.setAttributes(getAttributes(event));
 					event = eventReader.nextEvent();
 					email.setText(event.asCharacters().getData());
 					person.setEmail(email);
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
-					Text uri = new Text();
+					AtomText uri = new AtomText();
 					uri.setAttributes(getAttributes(event));
 					event = eventReader.nextEvent();
 					uri.setText(event.asCharacters().getData());
@@ -81,8 +81,8 @@ public enum AtomParser implements IParser {
 		return person;
 	}
 
-	private Category getCategory(XMLEvent event) throws XMLStreamException {
-		Category category = new Category();
+	private AtomCategory getCategory(XMLEvent event) throws XMLStreamException {
+		AtomCategory category = new AtomCategory();
 		category.setAttributes(getAttributes(event));
 
 		while (true) {
@@ -98,8 +98,8 @@ public enum AtomParser implements IParser {
 		return category;
 	}
 
-	private Generator getGenerator(XMLEvent event) throws XMLStreamException {
-		Generator generator = new Generator();
+	private AtomGenerator getGenerator(XMLEvent event) throws XMLStreamException {
+		AtomGenerator generator = new AtomGenerator();
 		generator.setAttributes(getAttributes(event));
 
 		while (true) {
@@ -124,8 +124,8 @@ public enum AtomParser implements IParser {
 		return generator;
 	}
 
-	private Text getText(XMLEvent event, String elementName) throws XMLStreamException {
-		Text text = new Text();
+	private AtomText getText(XMLEvent event, String elementName) throws XMLStreamException {
+		AtomText text = new AtomText();
 		text.setAttributes(getAttributes(event));
 
 		while (true) {
@@ -158,8 +158,8 @@ public enum AtomParser implements IParser {
 		return atomDate;
 	}
 
-	private SimpleElement getSimpleElement(XMLEvent event, String elementName) throws XMLStreamException {
-		SimpleElement content = new SimpleElement();
+	private AtomSimpleElement getSimpleElement(XMLEvent event, String elementName) throws XMLStreamException {
+		AtomSimpleElement content = new AtomSimpleElement();
 		content.setAttributes(getAttributes(event));
 
 		while (eventReader.hasNext()) {
@@ -175,8 +175,8 @@ public enum AtomParser implements IParser {
 		return content;
 	}
 
-	private Source getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
-		Source source = new Source();
+	private AtomSource getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
+		AtomSource source = new AtomSource();
 		source.setAttributes(getAttributes(event));
 
 		while (eventReader.hasNext()) {
@@ -217,8 +217,8 @@ public enum AtomParser implements IParser {
 	}
 
 	@Override
-	public Source getHeader() throws XMLStreamException, XMLParseException {
-		Source header = new Source();
+	public AtomSource getHeader() throws XMLStreamException, XMLParseException {
+		AtomSource header = new AtomSource();
 
 		while (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
@@ -276,8 +276,8 @@ public enum AtomParser implements IParser {
 	}
 
 	@Override
-	public Entry nextEntry() throws XMLStreamException, XMLParseException {
-		Entry entry = null;
+	public AtomEntry nextEntry() throws XMLStreamException, XMLParseException {
+		AtomEntry entry = null;
 		while (eventReader.hasNext()) {
 			XMLEvent event;
 			try {
@@ -287,7 +287,7 @@ public enum AtomParser implements IParser {
 			}
 
 			if (entry == null) {
-				entry = new Entry();
+				entry = new AtomEntry();
 			}
 
 			if (event.isStartElement()) {

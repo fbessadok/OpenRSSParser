@@ -1,20 +1,20 @@
 package samples;
 
-import openrssparser.OpenRSS;
-import openrssparser.models.rss2.Header;
-import openrssparser.models.rss2.Item;
+import openrssparser.OpenRss;
+import openrssparser.models.rss2.Rss2Header;
+import openrssparser.models.rss2.Rss2Item;
 
-public class ParseRSS2URL {
+public class ParseRss2URL {
 
 	public static void main(String args[]) {
 		String rss2Feed = "http://cyber.law.harvard.edu/blogs/gems/tech/rss2sample.xml";
 		try {
 			for (int i = 1; i <= 17; i++) {
 				long begin = System.currentTimeMillis();
-				OpenRSS.PARSER.declareURL(rss2Feed);
-				Header header = (Header) OpenRSS.getInstance().getHeader();
-				while (OpenRSS.getInstance().hasEntry()) {
-					Item item = (Item) OpenRSS.getInstance().nextEntry();
+				OpenRss.PARSER.declareURL(rss2Feed);
+				Rss2Header header = (Rss2Header) OpenRss.getInstance().getHeader();
+				while (OpenRss.getInstance().hasEntry()) {
+					Rss2Item item = (Rss2Item) OpenRss.getInstance().nextEntry();
 					item.getAuthor();
 				}
 				long end = System.currentTimeMillis();
