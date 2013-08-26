@@ -12,7 +12,7 @@ package openrssparser.models.atom;
 public class AtomPerson extends AtomElement {
 
 	private String name;
-	private AtomText uri;
+	private AtomText url;
 	private AtomText email;
 
 	public String getName() {
@@ -23,12 +23,12 @@ public class AtomPerson extends AtomElement {
 		this.name = name;
 	}
 
-	public AtomText getUri() {
-		return uri;
+	public AtomText getUrl() {
+		return url;
 	}
 
-	public void setUri(AtomText uri) {
-		this.uri = uri;
+	public void setUrl(AtomText url) {
+		this.url = url;
 	}
 
 	public AtomText getEmail() {

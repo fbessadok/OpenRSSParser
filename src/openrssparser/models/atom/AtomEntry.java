@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IEntry;
 
 /*
@@ -141,6 +143,27 @@ public class AtomEntry extends AtomElement implements IEntry {
 
 	public void setUpdated(AtomDate updated) {
 		this.updated = updated;
+	}
+
+	public Entry toCommon() {
+		Entry common = new Entry();
+		common.setInitial(this);
+		for (AtomPerson author : authors) {
+			Person authorCommon = new Person(author.getName(), author.getEmail().getText(), author.getUrl().getText());
+			common.getAuthors().add(authorCommon);
+		}
+		for (AtomPerson contributor : contributors) {
+			Person contributorCommon = new Person(contributor.getName(), contributor.getEmail().getText(), contributor.getUrl().getText());
+			common.getContributors().add(contributorCommon);
+		}
+		for (AtomCategory category : categories) {
+			for (int i = 0; i < category.getAttributes().size(); i++) {
+				if (category.getAttributes().get(i).getName().equals("term")) {
+					common.getCategories().add(category.getAttributes().get(i).getValue());
+				}
+			}
+		}
+		return common;
 	}
 
 }

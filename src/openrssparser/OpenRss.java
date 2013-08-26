@@ -15,21 +15,15 @@ import javax.xml.stream.XMLStreamException;
 import openrssparser.engines.AtomParser;
 import openrssparser.engines.IParser;
 import openrssparser.engines.Rss2Parser;
-import openrssparser.models.atom.AtomEntry;
-import openrssparser.models.atom.AtomSource;
 import openrssparser.models.common.FeedType;
+import openrssparser.models.common.interfaces.IEntry;
+import openrssparser.models.common.interfaces.IHeader;
 
-public enum OpenRss implements IParser {
-	PARSER;
-	private static IParser realParser;
+public class OpenRss implements IParser {
+
+	private static IParser commonParser;
 	private XMLEventReader eventReader;
-	
-	public static IParser getInstance() {
-		if (realParser != null) {
-			return realParser;
-		}
-		return PARSER;
-	}
+
 	
 	public void declareFile(String feedUrl) throws FileNotFoundException, XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -58,27 +52,25 @@ public enum OpenRss implements IParser {
 	
 	private void createInstance() {
 		if (getFeedType().equals(FeedType.ATOM)) {
-			AtomParser.PARSER.setEventReader(eventReader);
-			realParser = AtomParser.PARSER;
+			commonParser = new AtomParser(eventReader);
 		} else if (getFeedType().equals(FeedType.RSS)) {
-			Rss2Parser.PARSER.setEventReader(eventReader);
-			realParser = Rss2Parser.PARSER;
+			commonParser = new Rss2Parser(eventReader);
 		}
 	}
 
 	@Override
-	public AtomSource getHeader() throws XMLStreamException, XMLParseException {
-		return null;
+	public IHeader getHeader() throws XMLStreamException, XMLParseException {
+		return commonParser.getHeader();
 	}
 
 	@Override
 	public boolean hasEntry() throws XMLStreamException {
-		return false;
+		return commonParser.hasEntry();
 	}
 
 	@Override
-	public AtomEntry nextEntry() throws XMLStreamException, XMLParseException {
-		return null;
+	public IEntry nextEntry() throws XMLStreamException, XMLParseException {
+		return commonParser.nextEntry();
 	}
 
 }

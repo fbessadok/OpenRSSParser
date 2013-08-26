@@ -3,15 +3,12 @@ package openrssparser.models.common;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.stream.events.Attribute;
-
 import openrssparser.models.common.interfaces.IEntry;
 
 public class Entry {
 
 	private IEntry initial;
 
-	private List<Attribute> attributes;
 	private List<Person> authors;
 	private List<Person> contributors;
 	private List<String> categories;
@@ -28,14 +25,6 @@ public class Entry {
 
 	public void setInitial(IEntry initial) {
 		this.initial = initial;
-	}
-
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
-
-	public void setAttributes(List<Attribute> attributes) {
-		this.attributes = attributes;
 	}
 
 	public List<Person> getAuthors() {

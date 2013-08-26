@@ -14,12 +14,14 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
+import openrssparser.models.common.interfaces.IEntry;
+import openrssparser.models.common.interfaces.IHeader;
+import openrssparser.models.rss2.Rss2ElementName;
 import openrssparser.models.rss2.Rss2Enclosure;
 import openrssparser.models.rss2.Rss2Header;
 import openrssparser.models.rss2.Rss2Image;
 import openrssparser.models.rss2.Rss2Item;
 import openrssparser.models.rss2.Rss2Person;
-import openrssparser.models.rss2.Rss2ElementName;
 import openrssparser.models.rss2.Rss2TextInput;
 
 /*
@@ -33,12 +35,11 @@ import openrssparser.models.rss2.Rss2TextInput;
  * 
  */
 
-public enum Rss2Parser implements IParser {
+public class Rss2Parser implements IParser {
 
-	PARSER;
 	private XMLEventReader eventReader;
 
-	public void setEventReader(XMLEventReader eventReader) {
+	public Rss2Parser(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
 
@@ -129,7 +130,7 @@ public enum Rss2Parser implements IParser {
 		return enclosure;
 	}
 
-	public Rss2Header getHeader() throws XMLStreamException, XMLParseException {
+	public IHeader getHeader() throws XMLStreamException, XMLParseException {
 		Rss2Header header = new Rss2Header();
 
 		while (eventReader.hasNext()) {
@@ -209,7 +210,7 @@ public enum Rss2Parser implements IParser {
 	}
 
 	@Override
-	public Rss2Item nextEntry() throws XMLStreamException, XMLParseException {
+	public IEntry nextEntry() throws XMLStreamException, XMLParseException {
 		Rss2Item item = new Rss2Item();
 
 		while (eventReader.hasNext()) {

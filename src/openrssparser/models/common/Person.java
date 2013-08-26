@@ -4,7 +4,17 @@ public class Person {
 
 	private String name;
 	private String email;
-	private String description;
+	private String url;
+
+	public Person(String name, String email) {
+		this(name, email, "");
+	}
+
+	public Person(String name, String email, String url) {
+		this.name = name;
+		this.email = email;
+		this.url = url;
+	}
 
 	public String getName() {
 		return name;
@@ -22,12 +32,12 @@ public class Person {
 		this.email = email;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setUrl(String description) {
+		this.url = description;
 	}
 
 }
