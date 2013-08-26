@@ -22,16 +22,22 @@ All cases are not yet implemented but most of them are; And the code is voluntar
 
 **Example**
 
-    OpenRSS.PARSER.declareFile(atomFeed);
-    Source header = OpenRSS.getInstance().getHeader();
-    while (OpenRSS.getInstance().hasEntry()) {
-      Entry/Item entry = (Entry/Item)OpenRSS.getInstance().nextEntry();
-      entry.getAuthors();
+    OpenRssParser myParser = new OpenRssParser();
+    myParser.declareFile(feedUrl/feedPath);
+    Header header = myParser.getHeader();
+    while (myParser.hasEntry()) {
+      Entry entry = myParser.nextEntry();
+      entry.getTitle();
     }
 
-You can store the parser in its own variable after declaring your source:
+You can get the type of your feed using this method
 
-    IParser myParser = OpenRSS.getInstance();
+    myParser.getFeedType(); // Returns either FeedType.ATOM or FeedType.RSS2
+
+The `Header` and `Entry` objects are two unifications between Atom and Rss2 models. Some informations that are not widely used might have been lost in the unification process. If you want to use them anyway, the real objects are stored inside these ones. So you can use the `getInitial()` method to get them:
+
+    header.getInitial(); // Returns an instance of AtomSource or Rss2Header depending on the value of FeedType
+    entry.getInitial(); // Returns an instance of AtomEntry or Rss2Item depending on the value of FeedType
 
 More examples in the samples package.
 
