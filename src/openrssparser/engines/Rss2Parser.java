@@ -14,8 +14,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import openrssparser.models.common.interfaces.IEntry;
-import openrssparser.models.common.interfaces.IHeader;
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Header;
 import openrssparser.models.rss2.Rss2ElementName;
 import openrssparser.models.rss2.Rss2Enclosure;
 import openrssparser.models.rss2.Rss2Header;
@@ -130,7 +130,7 @@ public class Rss2Parser implements IParser {
 		return enclosure;
 	}
 
-	public IHeader getHeader() throws XMLStreamException, XMLParseException {
+	public Header getHeader() throws XMLStreamException, XMLParseException {
 		Rss2Header header = new Rss2Header();
 
 		while (eventReader.hasNext()) {
@@ -195,7 +195,7 @@ public class Rss2Parser implements IParser {
 				break;
 			}
 		}
-		return header;
+		return header.toCommon();
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class Rss2Parser implements IParser {
 	}
 
 	@Override
-	public IEntry nextEntry() throws XMLStreamException, XMLParseException {
+	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		Rss2Item item = new Rss2Item();
 
 		while (eventReader.hasNext()) {
@@ -257,7 +257,7 @@ public class Rss2Parser implements IParser {
 				break;
 			}
 		}
-		return item;
+		return item.toCommon();
 	}
 
 }

@@ -15,11 +15,11 @@ import javax.xml.stream.XMLStreamException;
 import openrssparser.engines.AtomParser;
 import openrssparser.engines.IParser;
 import openrssparser.engines.Rss2Parser;
+import openrssparser.models.common.Entry;
 import openrssparser.models.common.FeedType;
-import openrssparser.models.common.interfaces.IEntry;
-import openrssparser.models.common.interfaces.IHeader;
+import openrssparser.models.common.Header;
 
-public class OpenRss implements IParser {
+public class OpenRssParser implements IParser {
 
 	private static IParser commonParser;
 	private XMLEventReader eventReader;
@@ -59,7 +59,7 @@ public class OpenRss implements IParser {
 	}
 
 	@Override
-	public IHeader getHeader() throws XMLStreamException, XMLParseException {
+	public Header getHeader() throws XMLStreamException, XMLParseException {
 		return commonParser.getHeader();
 	}
 
@@ -69,7 +69,7 @@ public class OpenRss implements IParser {
 	}
 
 	@Override
-	public IEntry nextEntry() throws XMLStreamException, XMLParseException {
+	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		return commonParser.nextEntry();
 	}
 

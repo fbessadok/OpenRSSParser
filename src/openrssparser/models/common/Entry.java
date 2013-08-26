@@ -1,17 +1,17 @@
 package openrssparser.models.common;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import openrssparser.models.common.interfaces.IEntry;
 
-public class Entry implements IEntry {
+public class Entry {
 
 	private IEntry initial;
 
-	private List<Person> authors;
-	private List<Person> contributors;
-	private List<String> categories;
+	private List<Person> authors = new ArrayList<Person>();
+	private List<String> categories = new ArrayList<String>();
 	private String title;
 	private String url;
 	private String description;
@@ -32,14 +32,6 @@ public class Entry implements IEntry {
 
 	public void setAuthors(List<Person> authors) {
 		this.authors = authors;
-	}
-
-	public List<Person> getContributors() {
-		return contributors;
-	}
-
-	public void setContributors(List<Person> contributors) {
-		this.contributors = contributors;
 	}
 
 	public List<String> getCategories() {

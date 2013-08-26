@@ -1,8 +1,11 @@
 package openrssparser.models.rss2;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IEntry;
 
 public class Rss2Item implements IEntry {
@@ -10,9 +13,9 @@ public class Rss2Item implements IEntry {
 	private String title;
 	private String link;
 	private String description;
-	private List<String> categories;
+	private List<String> categories = new ArrayList<String>();
 	private String comments;
-	private List<Rss2Enclosure> enclosure;
+	private List<Rss2Enclosure> enclosure = new ArrayList<Rss2Enclosure>();
 	private String guid;
 	private Date pubDate;
 	private String source;
@@ -96,6 +99,23 @@ public class Rss2Item implements IEntry {
 
 	public void setAuthor(Rss2Person author) {
 		this.author = author;
+	}
+
+	public Entry toCommon() {
+		Entry common = new Entry();
+		common.setInitial(this);
+		if (author != null) {
+			common.getAuthors().add(new Person(author.getName(), author.getEmail()));
+		}
+		for (String category : categories) {
+			common.getCategories().add(category);
+		}
+		common.setTitle(title);
+		common.setUrl(link);
+		common.setDescription(description);
+		common.setPublicationDate(pubDate);
+		common.setModificationDate(null);
+		return common;
 	}
 
 }

@@ -1,8 +1,11 @@
 package openrssparser.models.rss2;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import openrssparser.models.common.Header;
+import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IHeader;
 
 public class Rss2Header implements IHeader {
@@ -16,15 +19,15 @@ public class Rss2Header implements IHeader {
 	private String webMaster;
 	private Date pubDate;
 	private Date lastBuildDate;
-	private List<String> categories;
+	private List<String> categories = new ArrayList<String>();
 	private String generator;
 	private String docs;
 	private String cloud;
 	private Integer ttl;
 	private String rating;
 	private Rss2TextInput textInput;
-	private List<Integer> skipHours;
-	private List<String> skipDays;
+	private List<Integer> skipHours = new ArrayList<Integer>();
+	private List<String> skipDays = new ArrayList<String>();
 	private Rss2Image image;
 
 	public String getTitle() {
@@ -177,6 +180,24 @@ public class Rss2Header implements IHeader {
 
 	public void setImage(Rss2Image image) {
 		this.image = image;
+	}
+
+	public Header toCommon() {
+		Header common = new Header();
+		common.setInitial(this);
+		common.getAuthors().add(new Person(managingEditor));
+		for (String category : categories) {
+			common.getCategories().add(category);
+		}
+		common.setTitle(title);
+		common.setUrl(link);
+		common.setDescription(description);
+		if (image != null) {
+			common.setLogoUrl(image.getLink());
+		}
+		common.setPublicationDate(pubDate);
+		common.setModificationDate(lastBuildDate);
+		return common;
 	}
 
 }

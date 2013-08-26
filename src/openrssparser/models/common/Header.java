@@ -11,13 +11,13 @@ public class Header {
 	private IHeader initial;
 
 	private List<Person> authors = new ArrayList<Person>();
+	private List<String> categories = new ArrayList<String>();
 	private String title;
 	private String url;
 	private String description;
 	private String logoUrl;
 	private Date publicationDate;
 	private Date modificationDate;
-	private List<String> categories;
 
 	public IHeader getInitial() {
 		return initial;

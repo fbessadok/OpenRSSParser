@@ -3,26 +3,28 @@ package openrssparser.models.atom;
 import java.util.ArrayList;
 import java.util.List;
 
+import openrssparser.models.common.Header;
+import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IHeader;
 
 /*
  *  atomSource =
-      element atom:source {
-         atomCommonAttributes,
-         (atomAuthor*
-          & atomCategory*
-          & atomContributor*
-          & atomGenerator?
-          & atomIcon?
-          & atomId?
-          & atomLink*
-          & atomLogo?
-          & atomRights?
-          & atomSubtitle?
-          & atomTitle?
-          & atomUpdated?
-          & extensionElement*)
-      }
+ element atom:source {
+ atomCommonAttributes,
+ (atomAuthor*
+ & atomCategory*
+ & atomContributor*
+ & atomGenerator?
+ & atomIcon?
+ & atomId?
+ & atomLink*
+ & atomLogo?
+ & atomRights?
+ & atomSubtitle?
+ & atomTitle?
+ & atomUpdated?
+ & extensionElement*)
+ }
  */
 
 public class AtomSource extends AtomElement implements IHeader {
@@ -134,6 +136,47 @@ public class AtomSource extends AtomElement implements IHeader {
 
 	public void setUpdated(AtomDate updated) {
 		this.updated = updated;
+	}
+
+	public Header toCommon() {
+		Header common = new Header();
+		common.setInitial(this);
+		for (AtomPerson author : authors) {
+			Person authorCommon = new Person(author.getName(), author.getEmail().getText(), author.getUrl().getText());
+			common.getAuthors().add(authorCommon);
+		}
+		for (AtomCategory category : categories) {
+			for (int i = 0; i < category.getAttributes().size(); i++) {
+				if (category.getAttributes().get(i).getName().equals("term")) {
+					common.getCategories().add(category.getAttributes().get(i).getValue());
+				}
+			}
+		}
+		if (title != null) {
+			common.setTitle(title.getText());
+		}
+		for (AtomSimpleElement link : links) {
+			for (int i = 0; i < link.getAttributes().size(); i++) {
+				if (link.getAttributes().get(i).getName().equals("href")) {
+					common.setUrl(link.getAttributes().get(i).getValue());
+					break;
+				}
+			}
+			if (common.getUrl() != null) {
+				break;
+			}
+		}
+		if (subtitle != null) {
+			common.setDescription(subtitle.getText());
+		}
+		if (logo != null) {
+			common.setLogoUrl(logo.getText());
+		}
+		common.setPublicationDate(null);
+		if (updated != null) {
+			common.setModificationDate(updated.getDate());
+		}
+		return common;
 	}
 
 }

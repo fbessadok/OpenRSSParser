@@ -20,8 +20,8 @@ import openrssparser.models.atom.AtomPerson;
 import openrssparser.models.atom.AtomSimpleElement;
 import openrssparser.models.atom.AtomSource;
 import openrssparser.models.atom.AtomText;
-import openrssparser.models.common.interfaces.IEntry;
-import openrssparser.models.common.interfaces.IHeader;
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Header;
 
 /*
  * Atom Feed Parser
@@ -219,7 +219,7 @@ public class AtomParser implements IParser {
 	}
 
 	@Override
-	public IHeader getHeader() throws XMLStreamException, XMLParseException {
+	public Header getHeader() throws XMLStreamException, XMLParseException {
 		AtomSource header = new AtomSource();
 
 		while (eventReader.hasNext()) {
@@ -263,7 +263,7 @@ public class AtomParser implements IParser {
 				break;
 			}
 		}
-		return header;
+		return header.toCommon();
 	}
 
 	@Override
@@ -278,7 +278,7 @@ public class AtomParser implements IParser {
 	}
 
 	@Override
-	public IEntry nextEntry() throws XMLStreamException, XMLParseException {
+	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		AtomEntry entry = null;
 		while (eventReader.hasNext()) {
 			XMLEvent event;

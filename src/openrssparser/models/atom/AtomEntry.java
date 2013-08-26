@@ -151,10 +151,6 @@ public class AtomEntry extends AtomElement implements IEntry {
 			Person authorCommon = new Person(author.getName(), author.getEmail().getText(), author.getUrl().getText());
 			common.getAuthors().add(authorCommon);
 		}
-		for (AtomPerson contributor : contributors) {
-			Person contributorCommon = new Person(contributor.getName(), contributor.getEmail().getText(), contributor.getUrl().getText());
-			common.getContributors().add(contributorCommon);
-		}
 		for (AtomCategory category : categories) {
 			for (int i = 0; i < category.getAttributes().size(); i++) {
 				if (category.getAttributes().get(i).getName().equals("term")) {
@@ -162,7 +158,9 @@ public class AtomEntry extends AtomElement implements IEntry {
 				}
 			}
 		}
-		common.setTitle(title.getText());
+		if (title != null) {
+			common.setTitle(title.getText());
+		}
 		for (AtomSimpleElement link : links) {
 			for (int i = 0; i < link.getAttributes().size(); i++) {
 				if (link.getAttributes().get(i).getName().equals("href")) {
@@ -174,9 +172,16 @@ public class AtomEntry extends AtomElement implements IEntry {
 				break;
 			}
 		}
-		common.setDescription(summary.getText());
-		common.setPublicationDate(published.getDate());
-		common.setModificationDate(updated.getDate());
+		if (summary != null) {
+			common.setDescription(summary.getText());
+		}
+		if (published != null) {
+			common.setPublicationDate(published.getDate());
+		}
+		if (updated != null) {
+			common.setModificationDate(updated.getDate());
+		}
 		return common;
 	}
+
 }

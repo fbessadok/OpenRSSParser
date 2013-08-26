@@ -3,9 +3,9 @@ package samples;
 import java.io.FileReader;
 import java.util.List;
 
-import openrssparser.OpenRss;
-import openrssparser.models.atom.AtomEntry;
-import openrssparser.models.atom.AtomSource;
+import openrssparser.OpenRssParser;
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Header;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -32,10 +32,11 @@ public class ParseAtomFileComparisonWithRome {
 	}
 	
 	public static void parseWithOpenRSSParser(String atomFeed) throws Exception {
-		OpenRss.PARSER.declareFile(atomFeed);
-		AtomSource header = (AtomSource) OpenRss.getInstance().getHeader();
-		while (OpenRss.getInstance().hasEntry()) {
-			AtomEntry entry = (AtomEntry) OpenRss.getInstance().nextEntry();
+		OpenRssParser myParser = new OpenRssParser();
+		myParser.declareFile(atomFeed);
+		Header header = myParser.getHeader();
+		while (myParser.hasEntry()) {
+			Entry entry = myParser.nextEntry();
 			entry.getAuthors();
 		}
 	}

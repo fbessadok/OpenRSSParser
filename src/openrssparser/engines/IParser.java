@@ -3,15 +3,15 @@ package openrssparser.engines;
 import javax.management.modelmbean.XMLParseException;
 import javax.xml.stream.XMLStreamException;
 
-import openrssparser.models.common.interfaces.IEntry;
-import openrssparser.models.common.interfaces.IHeader;
+import openrssparser.models.common.Entry;
+import openrssparser.models.common.Header;
 
 public interface IParser {
 
-	IHeader getHeader() throws XMLStreamException, XMLParseException;
+	Header getHeader() throws XMLStreamException, XMLParseException;
 
 	boolean hasEntry() throws XMLStreamException;
 
-	IEntry nextEntry() throws XMLStreamException, XMLParseException;
+	Entry nextEntry() throws XMLStreamException, XMLParseException;
 
 }
