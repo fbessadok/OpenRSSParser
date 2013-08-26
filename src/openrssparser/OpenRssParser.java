@@ -27,7 +27,7 @@ public class OpenRssParser implements IParser {
 	private static IParser commonParser;
 	private XMLEventReader eventReader;
 	private FeedType feedType;
-	
+
 	public FeedType getFeedType() {
 		return feedType;
 	}
@@ -54,8 +54,8 @@ public class OpenRssParser implements IParser {
 	}
 
 	private void createInstance(XMLEventReader reader) throws XMLStreamException {
-		while (eventReader.hasNext()) {
-			XMLEvent event = eventReader.nextEvent();
+		while (reader.hasNext()) {
+			XMLEvent event = reader.nextEvent();
 			if (event.isStartElement()) {
 				if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.FEED.getName())) {
 					this.feedType = FeedType.ATOM;
@@ -68,6 +68,7 @@ public class OpenRssParser implements IParser {
 				}
 			}
 		}
+		reader.close();
 	}
 
 	@Override

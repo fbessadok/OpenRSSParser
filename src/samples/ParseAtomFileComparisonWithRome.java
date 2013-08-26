@@ -30,7 +30,7 @@ public class ParseAtomFileComparisonWithRome {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void parseWithOpenRSSParser(String atomFeed) throws Exception {
 		OpenRssParser myParser = new OpenRssParser();
 		myParser.declareFile(atomFeed);

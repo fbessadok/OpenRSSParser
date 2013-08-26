@@ -8,7 +8,6 @@ import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IEntry;
 
 /*
- * 
  * url:			http://www.ietf.org/rfc/rfc4287.txt
  * section:		4.1.2.  The "atom:entry" Element
  * model:

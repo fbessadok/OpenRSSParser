@@ -1,7 +1,6 @@
 package openrssparser.models.atom;
 
 /*
- * 
  * atomCategory =
       element atom:category {
          atomCommonAttributes,
