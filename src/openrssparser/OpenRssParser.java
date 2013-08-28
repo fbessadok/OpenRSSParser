@@ -18,6 +18,7 @@ import openrssparser.engines.IParser;
 import openrssparser.engines.Rss2Parser;
 import openrssparser.models.atom.AtomElementName;
 import openrssparser.models.common.Entry;
+import openrssparser.models.common.Feed;
 import openrssparser.models.common.FeedType;
 import openrssparser.models.common.Header;
 import openrssparser.models.rss2.Rss2ElementName;
@@ -84,6 +85,15 @@ public class OpenRssParser implements IParser {
 	@Override
 	public Entry nextEntry() throws XMLStreamException, XMLParseException {
 		return commonParser.nextEntry();
+	}
+	
+	public Feed getFeed() throws XMLStreamException, XMLParseException {
+		Feed feed = new Feed();
+		feed.setHeader(getHeader());
+		while (hasEntry()) {
+			feed.getEntries().add(nextEntry());
+		}
+		return feed;
 	}
 
 }

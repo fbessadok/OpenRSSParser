@@ -5,6 +5,7 @@ import java.util.List;
 
 import openrssparser.OpenRssParser;
 import openrssparser.models.common.Entry;
+import openrssparser.models.common.Feed;
 import openrssparser.models.common.Header;
 
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -18,7 +19,7 @@ public class ParseAtomFileComparisonWithRome {
 		try {
 			for (int i = 0; i < 1000; i++) {
 				long begin1 = System.currentTimeMillis();
-				parseWithOpenRSSParser(atomFeed);
+				parseFullWithOpenRSSParser(atomFeed);
 				long end1 = System.currentTimeMillis();
 
 				long begin2 = System.currentTimeMillis();
@@ -31,6 +32,12 @@ public class ParseAtomFileComparisonWithRome {
 		}
 	}
 
+	public static void parseFullWithOpenRSSParser(String atomFeed) throws Exception {
+		OpenRssParser myParser = new OpenRssParser();
+		myParser.declareFile(atomFeed);
+		Feed feed = myParser.getFeed();
+		int i = 0;
+	}
 	public static void parseWithOpenRSSParser(String atomFeed) throws Exception {
 		OpenRssParser myParser = new OpenRssParser();
 		myParser.declareFile(atomFeed);

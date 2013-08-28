@@ -3,6 +3,8 @@ package openrssparser.models.atom;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.html.HTML.Attribute;
+
 import openrssparser.models.common.Entry;
 import openrssparser.models.common.Person;
 import openrssparser.models.common.interfaces.IEntry;
@@ -164,14 +166,41 @@ public class AtomEntry extends AtomElement implements IEntry {
 			common.setTitle(title.getText());
 		}
 		for (AtomSimpleElement link : links) {
+			if (link.getAttributes() == null) {
+				continue;
+			}
+			boolean alternate = false;
 			for (int i = 0; i < link.getAttributes().size(); i++) {
-				if (link.getAttributes() != null && link.getAttributes().get(i).getName().equals("href")) {
-					common.setUrl(link.getAttributes().get(i).getValue());
+				if (!alternate) {
+					alternate = link.getAttributes().get(i).getName().toString().equalsIgnoreCase(Attribute.REL.toString()) && link.getAttributes().get(i).getValue().equalsIgnoreCase("alternate");
+				} else if (link.getAttributes().get(i).getName().toString().equalsIgnoreCase(Attribute.HREF.toString())) {
+					common.setUrl(link.getAttributes().get(i).getValue().trim());
 					break;
 				}
 			}
 			if (common.getUrl() != null) {
 				break;
+			}
+		}
+		if (common.getUrl() == null) {
+			for (AtomSimpleElement link : links) {
+				if (link.getAttributes() == null) {
+					continue;
+				}
+				boolean rel = false;
+				String value = null;
+				for (int i = 0; i < link.getAttributes().size(); i++) {
+					if (!rel) {
+						rel = link.getAttributes().get(i).getName().toString().equalsIgnoreCase(Attribute.REL.toString());
+					}
+					if (link.getAttributes().get(i).getName().toString().equalsIgnoreCase(Attribute.HREF.toString())) {
+						value = link.getAttributes().get(i).getValue().trim();
+					}
+				}
+				if (rel) {
+					common.setUrl(value);
+					break;
+				}
 			}
 		}
 		if (summary != null) {

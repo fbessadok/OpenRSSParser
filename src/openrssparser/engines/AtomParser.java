@@ -270,6 +270,10 @@ public class AtomParser implements IParser {
 	public boolean hasEntry() throws XMLStreamException {
 		if (eventReader.hasNext()) {
 			XMLEvent event = eventReader.peek();
+			while (event.isCharacters()) {
+				event = eventReader.nextEvent();
+				event = eventReader.peek();
+			}
 			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
 				return true;
 			}

@@ -1,14 +1,15 @@
 package openrssparser.models.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.events.Attribute;
 
 public class Feed {
 
-	private List<Attribute> attributes;
+	private List<Attribute> attributes = new ArrayList<Attribute>();
 	private Header header;
-	private List<Entry> entries;
+	private List<Entry> entries = new ArrayList<Entry>();
 
 	public List<Attribute> getAttributes() {
 		return attributes;
