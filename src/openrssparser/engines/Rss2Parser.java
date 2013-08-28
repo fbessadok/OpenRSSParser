@@ -42,6 +42,14 @@ public class Rss2Parser implements IParser {
 	public Rss2Parser(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
+	
+	public void close() {
+		try {
+			eventReader.close();
+		} catch (XMLStreamException e) {
+			// TODO handle this
+		}
+	}
 
 	private List<Attribute> getAttributes(XMLEvent event) {
 		List<Attribute> attributes = new ArrayList<Attribute>();

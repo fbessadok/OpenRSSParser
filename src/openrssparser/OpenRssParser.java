@@ -87,12 +87,18 @@ public class OpenRssParser implements IParser {
 		return commonParser.nextEntry();
 	}
 	
+	@Override
+	public void close() {
+		commonParser.close();
+	}
+	
 	public Feed getFeed() throws XMLStreamException, XMLParseException {
 		Feed feed = new Feed();
 		feed.setHeader(getHeader());
 		while (hasEntry()) {
 			feed.getEntries().add(nextEntry());
 		}
+		close();
 		return feed;
 	}
 
