@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.management.modelmbean.XMLParseException;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
@@ -58,139 +57,160 @@ public class AtomParser implements IParser {
 		return attributes;
 	}
 
-	private AtomPerson getPerson(XMLEvent event, String elementName) throws XMLStreamException {
+	private AtomPerson getPerson(XMLEvent event, String elementName) {
 		AtomPerson person = new AtomPerson();
-		person.setAttributes(getAttributes(event));
-
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
-					break;
-				}
-			} else if (event.isStartElement()) {
-				String currentElementName = event.asStartElement().getName().getLocalPart();
-				if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONNAME.getName())) {
-					event = eventReader.nextEvent();
-					person.setName(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONEMAIL.getName())) {
-					AtomText email = new AtomText();
-					email.setAttributes(getAttributes(event));
-					event = eventReader.nextEvent();
-					email.setText(event.asCharacters().getData());
-					person.setEmail(email);
-				} else if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
-					AtomText url = new AtomText();
-					url.setAttributes(getAttributes(event));
-					event = eventReader.nextEvent();
-					url.setText(event.asCharacters().getData());
-					person.setUrl(url);
+		try {
+			person.setAttributes(getAttributes(event));
+			while (true) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
+						break;
+					}
+				} else if (event.isStartElement()) {
+					String currentElementName = event.asStartElement().getName().getLocalPart();
+					if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONNAME.getName())) {
+						event = eventReader.nextEvent();
+						person.setName(event.asCharacters().getData());
+					} else if (currentElementName.equalsIgnoreCase(AtomElementName.PERSONEMAIL.getName())) {
+						AtomText email = new AtomText();
+						email.setAttributes(getAttributes(event));
+						event = eventReader.nextEvent();
+						email.setText(event.asCharacters().getData());
+						person.setEmail(email);
+					} else if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
+						AtomText url = new AtomText();
+						url.setAttributes(getAttributes(event));
+						event = eventReader.nextEvent();
+						url.setText(event.asCharacters().getData());
+						person.setUrl(url);
+					}
 				}
 			}
+		} catch (XMLStreamException e) {
 		}
 		return person;
 	}
 
-	private AtomCategory getCategory(XMLEvent event) throws XMLStreamException {
+	private AtomCategory getCategory(XMLEvent event) {
 		AtomCategory category = new AtomCategory();
-		category.setAttributes(getAttributes(event));
+		try {
+			category.setAttributes(getAttributes(event));
 
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
-					break;
+			while (true) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
+						break;
+					}
+				} else if (event.isCharacters()) {
+					category.setUndefinedContent(event.asCharacters().getData());
 				}
-			} else if (event.isCharacters()) {
-				category.setUndefinedContent(event.asCharacters().getData());
 			}
+		} catch (XMLStreamException e) {
 		}
 		return category;
 	}
 
-	private AtomGenerator getGenerator(XMLEvent event) throws XMLStreamException {
+	private AtomGenerator getGenerator(XMLEvent event) {
 		AtomGenerator generator = new AtomGenerator();
-		generator.setAttributes(getAttributes(event));
+		try {
+			generator.setAttributes(getAttributes(event));
 
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
-					break;
-				}
-			} else if (event.isStartElement()) {
-				String currentElementName = event.asStartElement().getName().getLocalPart();
-				if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
-					event = eventReader.nextEvent();
-					generator.setUri(event.asCharacters().getData());
-				} else if (currentElementName.equalsIgnoreCase(AtomElementName.VERSION.getName())) {
-					event = eventReader.nextEvent();
-					generator.setVersion(event.asCharacters().getData());
-				} else if (event.asStartElement().isCharacters()) {
-					generator.setText(event.asCharacters().getData());
+			while (true) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.GENERATOR.getName())) {
+						break;
+					}
+				} else if (event.isStartElement()) {
+					String currentElementName = event.asStartElement().getName().getLocalPart();
+					if (currentElementName.equalsIgnoreCase(AtomElementName.URI.getName())) {
+						event = eventReader.nextEvent();
+						generator.setUri(event.asCharacters().getData());
+					} else if (currentElementName.equalsIgnoreCase(AtomElementName.VERSION.getName())) {
+						event = eventReader.nextEvent();
+						generator.setVersion(event.asCharacters().getData());
+					} else if (event.asStartElement().isCharacters()) {
+						generator.setText(event.asCharacters().getData());
+					}
 				}
 			}
+		} catch (XMLStreamException e) {
 		}
 		return generator;
 	}
 
-	private AtomText getText(XMLEvent event, String elementName) throws XMLStreamException {
+	private AtomText getText(XMLEvent event, String elementName) {
 		AtomText text = new AtomText();
-		text.setAttributes(getAttributes(event));
+		try {
+			text.setAttributes(getAttributes(event));
 
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
-					break;
+			while (true) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
+						break;
+					}
+				} else if (event.isCharacters()) {
+					text.setText(event.asCharacters().getData());
 				}
-			} else if (event.isCharacters()) {
-				text.setText(event.asCharacters().getData());
 			}
+		} catch (XMLStreamException e) {
 		}
 		return text;
 	}
 
-	private AtomDate getAtomDate(XMLEvent event, String elementName) throws XMLStreamException {
+	private AtomDate getAtomDate(XMLEvent event, String elementName) {
 		AtomDate atomDate = new AtomDate();
-		atomDate.setAttributes(getAttributes(event));
+		try {
+			atomDate.setAttributes(getAttributes(event));
 
-		while (true) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
-					break;
+			while (true) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
+						break;
+					}
+				} else if (event.isCharacters()) {
+					atomDate.setDate(DatatypeConverter.parseDateTime(event.asCharacters().getData()).getTime());
 				}
-			} else if (event.isCharacters()) {
-				atomDate.setDate(DatatypeConverter.parseDateTime(event.asCharacters().getData()).getTime());
 			}
+		} catch (XMLStreamException e) {
 		}
 		return atomDate;
 	}
 
-	private AtomSimpleElement getSimpleElement(XMLEvent event, String elementName) throws XMLStreamException {
+	private AtomSimpleElement getSimpleElement(XMLEvent event, String elementName) {
 		AtomSimpleElement content = new AtomSimpleElement();
-		content.setAttributes(getAttributes(event));
+		try {
+			content.setAttributes(getAttributes(event));
 
-		while (eventReader.hasNext()) {
-			event = eventReader.nextEvent();
-			if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
-					break;
+			while (eventReader.hasNext()) {
+				event = eventReader.nextEvent();
+				if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
+						break;
+					}
+				} else if (event.isCharacters()) {
+					content.setText(event.asCharacters().getData());
 				}
-			} else if (event.isCharacters()) {
-				content.setText(event.asCharacters().getData());
 			}
+		} catch (XMLStreamException e) {
 		}
 		return content;
 	}
 
-	private AtomSource getSource(XMLEvent event) throws XMLStreamException, XMLParseException {
+	private AtomSource getSource(XMLEvent event) {
 		AtomSource source = new AtomSource();
 		source.setAttributes(getAttributes(event));
 
 		while (eventReader.hasNext()) {
-			event = eventReader.nextEvent();
+			try {
+				event = eventReader.nextEvent();
+			} catch (XMLStreamException e) {
+				continue;
+			}
 
 			if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
@@ -227,16 +247,25 @@ public class AtomParser implements IParser {
 	}
 
 	@Override
-	public Header getHeader() throws XMLStreamException, XMLParseException {
+	public Header getHeader() {
 		AtomSource header = new AtomSource();
 
 		while (eventReader.hasNext()) {
-			XMLEvent event = eventReader.peek();
+			XMLEvent event;
+			try {
+				event = eventReader.peek();
+			} catch (XMLStreamException e) {
+				continue;
+			}
 			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
 				break;
 			}
 
-			event = eventReader.nextEvent();
+			try {
+				event = eventReader.nextEvent();
+			} catch (XMLStreamException e) {
+				continue;
+			}
 
 			if (event.isStartElement()) {
 				String currentElementName = event.asStartElement().getName().getLocalPart();
@@ -275,22 +304,25 @@ public class AtomParser implements IParser {
 	}
 
 	@Override
-	public boolean hasEntry() throws XMLStreamException {
+	public boolean hasEntry() {
 		if (eventReader.hasNext()) {
-			XMLEvent event = eventReader.peek();
-			while (event.isCharacters()) {
-				event = eventReader.nextEvent();
+			XMLEvent event = null;
+			try {
 				event = eventReader.peek();
+				while (event != null && event.isCharacters()) {
+					event = eventReader.nextEvent();
+					event = eventReader.peek();
+				}
+			} catch (XMLStreamException e) {
+				return false;
 			}
-			if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName())) {
-				return true;
-			}
+			return event != null && event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(AtomElementName.ENTRY.getName());
 		}
 		return false;
 	}
 
 	@Override
-	public Entry nextEntry() throws XMLStreamException, XMLParseException {
+	public Entry nextEntry() {
 		AtomEntry entry = null;
 		while (eventReader.hasNext()) {
 			XMLEvent event;
