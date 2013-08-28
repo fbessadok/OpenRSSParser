@@ -42,7 +42,7 @@ public class Rss2Parser implements IParser {
 	public Rss2Parser(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
-	
+
 	public void close() {
 		try {
 			eventReader.close();

@@ -13,7 +13,7 @@ public interface IParser {
 	boolean hasEntry() throws XMLStreamException;
 
 	Entry nextEntry() throws XMLStreamException, XMLParseException;
-	
+
 	void close();
 
 }

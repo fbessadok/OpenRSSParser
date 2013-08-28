@@ -39,7 +39,7 @@ public class AtomParser implements IParser {
 	public AtomParser(XMLEventReader eventReader) {
 		this.eventReader = eventReader;
 	}
-	
+
 	public void close() {
 		try {
 			eventReader.close();
