@@ -13,6 +13,7 @@ public class ParseAtomFile {
 				long begin = System.currentTimeMillis();
 				myParser.declareFile(atomFeed);
 				Header header = myParser.getHeader();
+				myParser.close();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
 			}

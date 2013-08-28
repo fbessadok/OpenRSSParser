@@ -18,6 +18,7 @@ public class ParseRss2URL {
 					Entry entry = myParser.nextEntry();
 					entry.getTitle();
 				}
+				myParser.close();
 				long end = System.currentTimeMillis();
 				System.out.println(i + "\t-\t" + (end - begin));
 			}
