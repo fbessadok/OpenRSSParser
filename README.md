@@ -14,13 +14,21 @@ All cases are not yet implemented but most of them are; And the code is voluntar
 
 ## HowTo
 
-1. Declare your source
-	* If it's a local feed file use declareFile(filePath) method
-	* If it's a remote feed use declareURL(url) method
-2. getHeader() First
-3. Then iterate using hasEntry() and nextEntry() each time
+You'll have to first declare your source:
+* If it's a local feed file use declareFile(filePath) method
+* If it's a remote feed use declareURL(url) method
 
-**Example**
+Then, there are two ways to use Open Rss Parser :
+1. Let the parser do all the work and returns you a `Feed` object containing all the data in the atom/rss file
+2. Iterate yourself on the feed to get the elements (one header and one or many entries) (be sure to close the parser at the end)
+
+**Example 1**
+
+    OpenRssParser myParser = new OpenRssParser();
+    myParser.declareFile(feedPath); // Or myParser.declareURL(feedUrl);
+    Feed feed = myParser.getFeed(); // The parser closes itself before returning the Feed object
+
+**Example 2**
 
     OpenRssParser myParser = new OpenRssParser();
     myParser.declareFile(feedPath); // Or myParser.declareURL(feedUrl);
@@ -29,6 +37,9 @@ All cases are not yet implemented but most of them are; And the code is voluntar
       Entry entry = myParser.nextEntry();
       entry.getTitle();
     }
+    myParser.close();
+
+The difference between these two ways is that the first one reads and parses all the file, create all the objects and returns them all at once in a Feed instance, but the second one is like a cursor: it reads the elements one by one and return them on the go. So the second way is faster than the first one. If you need to get all the data of an atom/rss file, you may need to use the first method, if you need to get only one or two entries of a feed you should use the second way (don't forget to `getHeader()` first and `close()` at the end). Both ways take a few milliseconds to execute on regular feeds (a dozens of entries).
 
 You can get the type of your feed using this method
 
