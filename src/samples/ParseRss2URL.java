@@ -7,7 +7,7 @@ import openrssparser.models.common.Header;
 public class ParseRss2URL {
 
 	public static void main(String args[]) {
-		String rss2Feed = "http://cyber.law.harvard.edu/blogs/gems/tech/rss2sample.xml";
+		String rss2Feed = "http://rss.slashdot.org/Slashdot/slashdot";
 		OpenRssParser myParser = new OpenRssParser();
 		try {
 			for (int i = 1; i <= 17; i++) {

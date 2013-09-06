@@ -71,7 +71,7 @@ public class Rss2Parser implements IParser {
 					break;
 				}
 			} else if (event.isCharacters()) {
-				string = event.asCharacters().getData();
+				string += event.asCharacters().getData();
 			}
 		}
 		return string;

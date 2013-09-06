@@ -2,7 +2,7 @@ package openrssparser.models.atom;
 
 public class AtomText extends AtomElement {
 
-	private String text;
+	private String text = "";
 
 	public String getText() {
 		return text;

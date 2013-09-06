@@ -153,7 +153,7 @@ public class AtomParser implements IParser {
 						break;
 					}
 				} else if (event.isCharacters()) {
-					text.setText(event.asCharacters().getData());
+					text.setText(text.getText() + event.asCharacters().getData());
 				}
 			}
 		} catch (XMLStreamException e) {
