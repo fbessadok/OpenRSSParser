@@ -16,7 +16,6 @@ import openrssparser.models.atom.AtomElementName;
 import openrssparser.models.atom.AtomEntry;
 import openrssparser.models.atom.AtomGenerator;
 import openrssparser.models.atom.AtomPerson;
-import openrssparser.models.atom.AtomSimpleElement;
 import openrssparser.models.atom.AtomSource;
 import openrssparser.models.atom.AtomText;
 import openrssparser.models.common.Entry;
@@ -156,6 +155,8 @@ public class AtomParser implements IParser {
 					text.setText(text.getText() + event.asCharacters().getData());
 				}
 			}
+			
+			text.setText(text.getText().trim());
 		} catch (XMLStreamException e) {
 		}
 		return text;
@@ -179,26 +180,6 @@ public class AtomParser implements IParser {
 		} catch (XMLStreamException e) {
 		}
 		return atomDate;
-	}
-
-	private AtomSimpleElement getSimpleElement(XMLEvent event, String elementName) {
-		AtomSimpleElement content = new AtomSimpleElement();
-		try {
-			content.setAttributes(getAttributes(event));
-
-			while (eventReader.hasNext()) {
-				event = eventReader.nextEvent();
-				if (event.isEndElement()) {
-					if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(elementName)) {
-						break;
-					}
-				} else if (event.isCharacters()) {
-					content.setText(event.asCharacters().getData());
-				}
-			}
-		} catch (XMLStreamException e) {
-		}
-		return content;
 	}
 
 	private AtomSource getSource(XMLEvent event) {
@@ -227,7 +208,7 @@ public class AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
 					source.setId(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					source.getLinks().add(getSimpleElement(event, currentElementName));
+					source.getLinks().add(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LOGO.getName())) {
 					source.setLogo(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
@@ -284,7 +265,7 @@ public class AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
 					header.setId(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					header.getLinks().add(getSimpleElement(event, currentElementName));
+					header.getLinks().add(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LOGO.getName())) {
 					header.setLogo(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {
@@ -345,13 +326,13 @@ public class AtomParser implements IParser {
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CATEGORY.getName())) {
 					entry.getCategories().add(getCategory(event));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTENT.getName())) {
-					entry.setContent(getSimpleElement(event, currentElementName));
+					entry.setContent(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.CONTRIBUTOR.getName())) {
 					entry.getContributors().add(getPerson(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.ID.getName())) {
 					entry.setId(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.LINK.getName())) {
-					entry.getLinks().add(getSimpleElement(event, currentElementName));
+					entry.getLinks().add(getText(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.PUBLISHED.getName())) {
 					entry.setPublished(getAtomDate(event, currentElementName));
 				} else if (currentElementName.equalsIgnoreCase(AtomElementName.RIGHTS.getName())) {

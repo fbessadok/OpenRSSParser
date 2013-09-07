@@ -38,10 +38,10 @@ public class AtomEntry extends AtomElement implements IEntry {
 
 	private List<AtomPerson> authors = new ArrayList<AtomPerson>();
 	private List<AtomCategory> categories = new ArrayList<AtomCategory>();
-	private AtomSimpleElement content;
+	private AtomText content;
 	private List<AtomPerson> contributors = new ArrayList<AtomPerson>();
 	private AtomText id;
-	private List<AtomSimpleElement> links = new ArrayList<AtomSimpleElement>();
+	private List<AtomText> links = new ArrayList<AtomText>();
 	private AtomDate published;
 	private AtomText rights;
 	private AtomSource source;
@@ -65,11 +65,11 @@ public class AtomEntry extends AtomElement implements IEntry {
 		this.categories = categories;
 	}
 
-	public AtomSimpleElement getContent() {
+	public AtomText getContent() {
 		return content;
 	}
 
-	public void setContent(AtomSimpleElement content) {
+	public void setContent(AtomText content) {
 		this.content = content;
 	}
 
@@ -89,11 +89,11 @@ public class AtomEntry extends AtomElement implements IEntry {
 		this.id = id;
 	}
 
-	public List<AtomSimpleElement> getLinks() {
+	public List<AtomText> getLinks() {
 		return links;
 	}
 
-	public void setLinks(List<AtomSimpleElement> links) {
+	public void setLinks(List<AtomText> links) {
 		this.links = links;
 	}
 
@@ -165,7 +165,7 @@ public class AtomEntry extends AtomElement implements IEntry {
 		if (title != null) {
 			common.setTitle(title.getText());
 		}
-		for (AtomSimpleElement link : links) {
+		for (AtomText link : links) {
 			if (link.getAttributes() == null) {
 				continue;
 			}
@@ -183,7 +183,7 @@ public class AtomEntry extends AtomElement implements IEntry {
 			}
 		}
 		if (common.getUrl() == null) {
-			for (AtomSimpleElement link : links) {
+			for (AtomText link : links) {
 				if (link.getAttributes() == null) {
 					continue;
 				}
@@ -203,8 +203,8 @@ public class AtomEntry extends AtomElement implements IEntry {
 				}
 			}
 		}
-		if (summary != null) {
-			common.setDescription(summary.getText());
+		if (content != null) {
+			common.setDescription(content.getText());
 		}
 		if (published != null) {
 			common.setPublicationDate(published.getDate());

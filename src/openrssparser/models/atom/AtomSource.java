@@ -37,7 +37,7 @@ public class AtomSource extends AtomElement implements IHeader {
 	private AtomGenerator generator;
 	private AtomText icon;
 	private AtomText id;
-	private List<AtomSimpleElement> links = new ArrayList<AtomSimpleElement>();
+	private List<AtomText> links = new ArrayList<AtomText>();
 	private AtomText logo;
 	private AtomText rights;
 	private AtomText subtitle;
@@ -92,11 +92,11 @@ public class AtomSource extends AtomElement implements IHeader {
 		this.id = id;
 	}
 
-	public List<AtomSimpleElement> getLinks() {
+	public List<AtomText> getLinks() {
 		return links;
 	}
 
-	public void setLinks(List<AtomSimpleElement> links) {
+	public void setLinks(List<AtomText> links) {
 		this.links = links;
 	}
 
@@ -160,7 +160,7 @@ public class AtomSource extends AtomElement implements IHeader {
 		if (title != null) {
 			common.setTitle(title.getText());
 		}
-		for (AtomSimpleElement link : links) {
+		for (AtomText link : links) {
 			if (link.getAttributes() == null) {
 				continue;
 			}
@@ -178,7 +178,7 @@ public class AtomSource extends AtomElement implements IHeader {
 			}
 		}
 		if (common.getUrl() == null) {
-			for (AtomSimpleElement link : links) {
+			for (AtomText link : links) {
 				if (link.getAttributes() == null) {
 					continue;
 				}

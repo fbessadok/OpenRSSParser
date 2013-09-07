@@ -38,6 +38,7 @@ public class ParseAtomFileComparisonWithRome {
 		Feed feed = myParser.getFeed();
 		int i = 0;
 	}
+
 	public static void parseWithOpenRSSParser(String atomFeed) throws Exception {
 		OpenRssParser myParser = new OpenRssParser();
 		myParser.declareFile(atomFeed);
