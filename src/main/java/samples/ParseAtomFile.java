@@ -6,7 +6,7 @@ import openrssparser.models.common.Header;
 public class ParseAtomFile {
 
 	public static void main(String args[]) {
-		String atomFeed = System.getProperty("user.dir") + "/src/samples/atom1.xml";
+		String atomFeed = ParseAtomFile.class.getResource("/atom1.xml").getPath();
 		OpenRssParser myParser = new OpenRssParser();
 		try {
 			for (int i = 1; i <= 17; i++) {
