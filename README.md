@@ -1,7 +1,9 @@
 # Welcome to Open RSS Parser
 
 Open RSS Parser, as its name says, is an RSS/Atom feeds parser. It aims to be light, easy to use, and doesn't rely on external libraries.
-Created on august 23th, 2013, it's obviously extremely small and not usable in real projects yet.  
+Created on august 23th, 2013, it's obviously extremely small and not usable in production yet.
+
+[![Build Status](https://travis-ci.org/fbessadok/OpenRSSParser.png?branch=master)](https://travis-ci.org/fbessadok/OpenRSSParser)
 
 ## Current Version
 
